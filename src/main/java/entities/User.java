@@ -1,11 +1,22 @@
 package entities;
 
 import jakarta.persistence.*;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Entity
+@NoArgsConstructor
+@Data
 @Table(name="TwitterUser")
 public class User {
 
+    @JoinTable(
+            name = "user_likes",
+            joinColumns = @JoinColumn(name = "tweet_id"),
+            inverseJoinColumns = @JoinColumn(name = "user_id")
+    )
+
+    // User ID used as a PK and FK??? Ask about follower/following id
     @OneToMany
     @Id
     @GeneratedValue
@@ -13,6 +24,7 @@ public class User {
 
     @Embedded
     private Credentials credentials;
+
     @Embedded
     private Profile profile;
 
