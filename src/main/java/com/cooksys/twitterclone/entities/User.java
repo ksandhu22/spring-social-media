@@ -1,4 +1,4 @@
-package entities;
+package com.cooksys.twitterclone.entities;
 
 import jakarta.persistence.*;
 import lombok.Data;
