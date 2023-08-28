@@ -50,11 +50,14 @@
 			<groupId>org.mapstruct</groupId>
 			<artifactId>mapstruct</artifactId>
 			<version>1.5.3.Final</version>
+<<<<<<< HEAD
+=======
 		</dependency>
 		<dependency>
 			<groupId>org.mapstruct</groupId>
 			<artifactId>mapstruct</artifactId>
 			<version>1.4.1.Final</version>
+>>>>>>> 239f157deec691012ed06772eb6667963c94f2ae
 		</dependency>
 	</dependencies>
 
@@ -92,3 +95,4 @@
 	</build>
 
 </project>
+
