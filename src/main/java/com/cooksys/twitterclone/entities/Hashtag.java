@@ -11,6 +11,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.JoinTable;
+import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import lombok.Data;
@@ -21,15 +22,11 @@ import lombok.NoArgsConstructor;
 @Data
 public class Hashtag {
 
-    @JoinTable(
-            name = "tweet_hastags",
-            joinColumns = @JoinColumn(name = "tweet_id"),
-            inverseJoinColumns = @JoinColumn(name = "hashtag_id")
-    )
+	
 
     @Id
     @GeneratedValue
-    
+    @Column(nullable = false, unique = true)
     private Long id;
     
     @Column(nullable = false, unique = true)
@@ -41,10 +38,11 @@ public class Hashtag {
    @CreationTimestamp
     private Timestamp lastUsed;
     
-    @OneToMany(mappedBy = "hashtag")
+    @ManyToMany
+    @JoinTable(
+    		name = "tweet_hashtags",
+    		joinColumns = @JoinColumn(name = "tweet_id"),
+    		inverseJoinColumns = @JoinColumn(name = "hashtag_id"))
     private List<Tweet> tweets;
     
-    @ManyToOne
-    @JoinColumn(name = "tweet_id")
-    private Tweet tweet;
 }

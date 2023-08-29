@@ -14,14 +14,10 @@ import lombok.NoArgsConstructor;
 @Data
 public class Tweet {
 
-    @JoinTable(
-            name = "user_mentions",
-            joinColumns = @JoinColumn(name = "user_id"),
-            inverseJoinColumns = @JoinColumn(name = "tweet_id")
-    )
+	
     @Id
     @GeneratedValue
-    
+    @Column(nullable = false, unique = true)
     private Long id;
     
     private Long author;
@@ -31,16 +27,17 @@ public class Tweet {
     private Boolean deleted;
     private String content;
     private Long inReplyTo;
-    private Long repostOf;
+    private Long repostOf;   
     
-    @OneToMany(mappedBy = "tweet")
+    @ManyToMany
+    @JoinTable(
+    		name = "user_mentions",
+    		joinColumns = @JoinColumn(name = "tweet_id"),
+    		inverseJoinColumns = @JoinColumn(name = "user_id"))
+    private List<User> users;
+    
+    @ManyToMany(mappedBy = "tweets")
     private List<Hashtag> hashtags;
     
-    @ManyToOne
-	@JoinColumn(name = "user_id")
-    private User user;
     
-    @ManyToOne
-	@JoinColumn(name = "hashtag")
-    private Hashtag hashtag;
 }

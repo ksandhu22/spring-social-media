@@ -12,19 +12,13 @@ import lombok.NoArgsConstructor;
 @Entity
 @NoArgsConstructor
 @Data
-@Table(name="TwitterUser")
+@Table(name="UserTable")
 public class User {
 
-    @JoinTable(
-            name = "user_likes",
-            joinColumns = @JoinColumn(name = "tweet_id"),
-            inverseJoinColumns = @JoinColumn(name = "user_id")
-    )
-
-    // User ID used as a PK and FK??? Ask about follower/following id
     
     @Id
     @GeneratedValue
+    @Column(nullable = false, unique = true)
     private Long id;
 
     @Embedded
@@ -32,10 +26,14 @@ public class User {
 
     @Embedded
     private Profile profile;
-
-    @OneToMany(mappedBy = "user")
-    private List<Tweet> tweets;
     
+    
+    @ManyToMany
+    @JoinTable(
+    		name = "user_likes",
+    		joinColumns = @JoinColumn(name = "user_id"),
+    		inverseJoinColumns = @JoinColumn(name = "tweet_id"))
+    private List<Tweet> tweets;
     
     
     @Embeddable
