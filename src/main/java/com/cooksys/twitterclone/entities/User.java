@@ -1,5 +1,10 @@
 package com.cooksys.twitterclone.entities;
 
+import java.sql.Timestamp;
+import java.util.List;
+
+import org.hibernate.annotations.CreationTimestamp;
+
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -17,7 +22,7 @@ public class User {
     )
 
     // User ID used as a PK and FK??? Ask about follower/following id
-    @OneToMany
+    
     @Id
     @GeneratedValue
     private Long id;
@@ -28,6 +33,11 @@ public class User {
     @Embedded
     private Profile profile;
 
+    @OneToMany(mappedBy = "user")
+    private List<Tweet> tweets;
+    
+    
+    
     @Embeddable
     public class Credentials {
         private String username;
@@ -37,7 +47,8 @@ public class User {
 
     @Embeddable
     public class Profile {
-        private Long joined;
+        @CreationTimestamp
+        private Timestamp joined;
         private Boolean deleted;
         private String firstName;
         private String lastName;

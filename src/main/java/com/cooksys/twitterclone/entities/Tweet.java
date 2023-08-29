@@ -1,5 +1,10 @@
 package com.cooksys.twitterclone.entities;
 
+import java.sql.Timestamp;
+import java.util.List;
+
+import org.hibernate.annotations.CreationTimestamp;
+
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -14,15 +19,28 @@ public class Tweet {
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "tweet_id")
     )
-
     @Id
     @GeneratedValue
-    @OneToMany
+    
     private Long id;
+    
     private Long author;
-    private Long posted;
+    
+    @CreationTimestamp
+    private Timestamp posted;
     private Boolean deleted;
     private String content;
     private Long inReplyTo;
     private Long repostOf;
+    
+    @OneToMany(mappedBy = "tweet")
+    private List<Hashtag> hashtags;
+    
+    @ManyToOne
+	@JoinColumn(name = "user_id")
+    private User user;
+    
+    @ManyToOne
+	@JoinColumn(name = "hashtag")
+    private Hashtag hashtag;
 }
