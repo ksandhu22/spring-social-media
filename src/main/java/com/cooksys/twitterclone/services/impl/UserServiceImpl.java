@@ -21,26 +21,7 @@ public class UserServiceImpl implements UserService{
     private final UserMapper userMapper;
     @Override
     public List<UserResponseDto> getAllUsers() {
-
-        // call to repo and find all users and store in variable
-        // now create new empty list for non deleted users
-        // loop through original list and check if user is deleted or not
-        // if a user is not deleted, add it to the new list
-        // return that new list
-
-//        List<User> allUserEntities = userRepository.findAll();
-//
-//        List<User> allActiveUsers = new ArrayList<>();
-//
-//        for(User currentUser : allUserEntities) {
-//            if(!currentUser.isDeleted()) {
-//                allActiveUsers.add(currentUser);
-//            }
-//        }
-//
-//        return userMapper.entitiesToDtos(allActiveUsers);
-
-
+        
          return userMapper.entitiesToDtos(userRepository.findAll());
     }
 }
