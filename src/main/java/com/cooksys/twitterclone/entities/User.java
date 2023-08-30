@@ -3,6 +3,7 @@ package com.cooksys.twitterclone.entities;
 import java.sql.Timestamp;
 import java.util.List;
 
+
 import org.hibernate.annotations.CreationTimestamp;
 
 import jakarta.persistence.*;
@@ -27,7 +28,7 @@ public class User {
     @Embedded
     private Profile profile;
     
-    @OneToMany
+    @OneToMany(mappedBy = "user")
     private List<Tweet> tweet;
     
     
