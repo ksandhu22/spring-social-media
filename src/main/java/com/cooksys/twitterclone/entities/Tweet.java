@@ -31,7 +31,7 @@ public class Tweet {
     @CreationTimestamp
     private Timestamp posted;
     
-    private Boolean deleted=false;
+    private boolean deleted=false;
     private String content;
     
     @ManyToMany
