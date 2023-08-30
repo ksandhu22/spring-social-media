@@ -20,4 +20,9 @@ public class UserController {
 	 public List<UserResponseDto> getAllUsers() {
 		 return userService.getAllUsers();
 	 }
+
+	@PostMapping
+	public UserResponseDto addUser(@RequestBody UserResponseDto newUser) {
+		 return userService.addUser(newUser);
+	}
 }
