@@ -1,6 +1,7 @@
 package com.cooksys.twitterclone.entities;
 
 import java.sql.Timestamp;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.hibernate.annotations.CreationTimestamp;
@@ -26,8 +27,6 @@ public class Tweet {
     private Timestamp posted;
     private Boolean deleted;
     private String content;
-    private Long inReplyTo;
-    private Long repostOf;   
     
     @ManyToMany
     @JoinTable(
@@ -39,5 +38,25 @@ public class Tweet {
     @ManyToMany(mappedBy = "tweets")
     private List<Hashtag> hashtags;
     
+    @ManyToOne
+    private User user;
+    
+    
+    //First Tweet Self-Reference
+    @ManyToOne(optional=true, fetch=FetchType.LAZY)
+    @JoinColumn
+    private Tweet inReplyTo;
+
+    @OneToMany(mappedBy="inReplyTo")
+    private List<Tweet> replyTo = new ArrayList<Tweet>();
+    
+    
+    //Second Tweet Self-Reference
+    @ManyToOne(optional=true, fetch=FetchType.LAZY)
+    @JoinColumn
+    private Tweet repostOf;
+
+    @OneToMany(mappedBy="repostOf")
+    private List<Tweet> repost = new ArrayList<Tweet>();
     
 }

@@ -27,6 +27,10 @@ public class User {
     @Embedded
     private Profile profile;
     
+    @OneToMany
+    private List<Tweet> tweet;
+    
+    
     
     @ManyToMany
     @JoinTable(
