@@ -35,6 +35,13 @@ public class User {
     		inverseJoinColumns = @JoinColumn(name = "tweet_id"))
     private List<Tweet> tweets;
     
+    @ManyToMany
+    @JoinTable(
+    		name = "followers_following",
+    		joinColumns = @JoinColumn(name = "follower_id"),
+    		inverseJoinColumns = @JoinColumn(name = "following_id"))
+    private List<User> users;
+    		
     
     @Embeddable
     public class Credentials {
