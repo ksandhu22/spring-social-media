@@ -7,6 +7,7 @@ import org.mapstruct.Mapper;
 import java.util.List;
 
 @Mapper(componentModel = "spring", uses = {UserMapper.class})
+
 public interface TweetMapper {
     List<TweetResponseDto> entitiesToDtos(List<Tweet> all);
 }
