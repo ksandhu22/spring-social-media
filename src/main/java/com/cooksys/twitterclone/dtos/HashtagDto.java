@@ -2,6 +2,7 @@ package com.cooksys.twitterclone.dtos;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import java.sql.Timestamp;
 
 import java.sql.Timestamp;
 

@@ -1,11 +1,11 @@
 package com.cooksys.twitterclone.services;
 
-import com.cooksys.twitterclone.dtos.HashtagDto;
-import com.cooksys.twitterclone.entities.Hashtag;
-
 import java.util.List;
+
+import com.cooksys.twitterclone.dtos.HashtagDto;
 
 public interface HashtagService {
 
-    List<HashtagDto> getAllHashTags();
+	List<HashtagDto> getAllHashtags();
+
 }
