@@ -1,5 +1,6 @@
 package com.cooksys.twitterclone.services.impl;
 
+import com.cooksys.twitterclone.dtos.UserRequestDto;
 import com.cooksys.twitterclone.dtos.UserResponseDto;
 import com.cooksys.twitterclone.entities.User;
 import com.cooksys.twitterclone.mappers.UserMapper;
@@ -27,9 +28,10 @@ public class UserServiceImpl implements UserService{
     }
 
     @Override
-    public UserResponseDto addUser(UserResponseDto newUser) {
+    public UserResponseDto addUser(UserRequestDto newUser) {
 
-        userRepository.save(userMapper.dtoToEntity(newUser));
-        return newUser;
+        User addedUser = userMapper.requestDtoToEntity(newUser);
+        userRepository.save(addedUser);
+        return userMapper.entityToDto(addedUser);
     }
 }
