@@ -58,7 +58,9 @@ public class TweetServiceImpl implements TweetService {
 
 
         // does not filter out deleted users currently
-        return userMapper.entitiesToDtos(foundTweet.get().getLikedByUsers());
+//        return userMapper.entitiesToDtos(foundTweet.get().getLikedByUsers());
         // return userMapper.entitiesToDtos(foundUsers);
+
+        return userMapper.entitiesToDtos(foundTweet.get().getLikedByUsers().stream().filter(user -> !user.isDeleted()).toList());
     }
 }
