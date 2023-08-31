@@ -56,9 +56,9 @@ public class TweetServiceImpl implements TweetService {
 
         //Tweet foundTweet = tweetRepository.findById(id);
     	
-    	//List<Tweet> foundTweet = tweetRepository.findByLikedByUsers(id);
-
-//        if(foundTweet.isEmpty() || foundTweet.get().isDeleted()) {
+//    	//List<Tweet> foundTweet = tweetRepository.findByLikedByUsers(id);
+//
+////        if(foundTweet.isEmpty() || foundTweet.get().isDeleted()) {
 //            throw new NotFoundException("Tweet not found");
 //        }
 
@@ -69,9 +69,17 @@ public class TweetServiceImpl implements TweetService {
         // does not filter out deleted users currently
         //return userMapper.entitiesToDtos(foundTweet.get().getLikedByUsers());
         // return userMapper.entitiesToDtos(foundUsers);
-    	return tweetMapper.entitiesToDtos(tweetRepository.findAll().stream().filter(user-> !user.isDeleted()).filter(foundTweet.getLikes()).toList());    }
+    	
 
+//        return userMapper.entitiesToDtos(foundTweet.get().getLikedByUsers());
+        // return userMapper.entitiesToDtos(foundUsers);
+
+        //return userMapper.entitiesToDtos(foundTweet.get().getLikedByUsers().stream().filter(user -> !user.isDeleted()).toList());
+    	
+    	return null;
     }
     
     public List<TweetResponseDto> getTweetLikes(){
+    	return null;
+    }
 }
