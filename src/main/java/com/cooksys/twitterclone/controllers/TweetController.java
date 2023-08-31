@@ -2,6 +2,7 @@ package com.cooksys.twitterclone.controllers;
 
 import java.util.List;
 
+import com.cooksys.twitterclone.dtos.ContextDto;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -67,6 +68,9 @@ public class TweetController {
 	 public List<TweetResponseDto> getRepliesByTweetId(@PathVariable Long id) {
 		 return tweetService.getRepliesByTweetId(id);
 	 }
-//	 @GetMapping("/{id}/context")
+	 @GetMapping("/{id}/context")
+	public ContextDto getContextFromTweetById(@PathVariable Long id) {
+		 return tweetService.getContextFromTweetById(id);
+	 }
 
 }
