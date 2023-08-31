@@ -1,5 +1,6 @@
 package com.cooksys.twitterclone.services.impl;
 
+import com.cooksys.twitterclone.dtos.TweetRequestDto;
 import com.cooksys.twitterclone.dtos.TweetResponseDto;
 import com.cooksys.twitterclone.mappers.TweetMapper;
 import com.cooksys.twitterclone.repositories.TweetRepository;
@@ -22,4 +23,16 @@ public class TweetServiceImpl implements TweetService {
     public List<TweetResponseDto> getAllTweets() {
         return tweetMapper.entitiesToDtos(tweetRepository.findAll().stream().filter(tweet -> !tweet.isDeleted()).toList());
     }
+
+	@Override
+	public TweetResponseDto createTweet(TweetResponseDto newTweet) {
+		tweetRepository.save(tweetMapper.dtoToEntity(newTweet));
+        return newTweet;
+	}
+
+	@Override
+	public TweetResponseDto createTweet(TweetRequestDto newTweet) {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }

@@ -9,5 +9,5 @@ public interface UserService {
 
     List<UserResponseDto> getAllUsers();
 
-    UserResponseDto addUser(UserResponseDto newUser);
+    UserResponseDto addUser(UserRequestDto newUser);
 }
