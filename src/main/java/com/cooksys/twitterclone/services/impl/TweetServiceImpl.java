@@ -54,18 +54,24 @@ public class TweetServiceImpl implements TweetService {
 
 //        Deleted users should be excluded from the response.
 
-        Optional<Tweet> foundTweet = tweetRepository.findById(id);
+        //Tweet foundTweet = tweetRepository.findById(id);
+    	
+    	//List<Tweet> foundTweet = tweetRepository.findByLikedByUsers(id);
 
-        if(foundTweet.isEmpty() || foundTweet.get().isDeleted()) {
-            throw new NotFoundException("Tweet not found");
-        }
+//        if(foundTweet.isEmpty() || foundTweet.get().isDeleted()) {
+//            throw new NotFoundException("Tweet not found");
+//        }
 
         // List<User> foundUsers = tweetRepository.findByLikedByUsersAndDeleted(foundTweet.get().getLikedByUsers(), false);
         // List<User> foundUsers = tweetRepository.findByLikedByUsersAndDeletedFalse(id);
 
 
         // does not filter out deleted users currently
-        return userMapper.entitiesToDtos(foundTweet.get().getLikedByUsers());
+        //return userMapper.entitiesToDtos(foundTweet.get().getLikedByUsers());
         // return userMapper.entitiesToDtos(foundUsers);
+    	return tweetMapper.entitiesToDtos(tweetRepository.findAll().stream().filter(user-> !user.isDeleted()).filter(foundTweet.getLikes()).toList());    }
+
     }
+    
+    public List<TweetResponseDto> getTweetLikes(){
 }
