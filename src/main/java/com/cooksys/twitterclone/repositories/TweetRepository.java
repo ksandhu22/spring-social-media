@@ -17,10 +17,11 @@ public interface TweetRepository extends JpaRepository<Tweet, Long>{
 
 //    List<User> findByLikedByUsersAndDeleted(List<User> users, Boolean deleted);
 
-    List<User> findByLikedByUsersAndDeletedFalse(Long id);
+    //List<User> findByLikedByUsersAndDeletedFalse(Long id);
 
 //    List<User> findByNameOrAge(String name, Integer age);
 //    List<User> findByNameAndActive(String name, Boolean active);
-
+    
+    
 
 }

@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.cooksys.twitterclone.dtos.HashtagDto;
 import com.cooksys.twitterclone.dtos.TweetResponseDto;
 import com.cooksys.twitterclone.dtos.UserResponseDto;
 import com.cooksys.twitterclone.services.TweetService;
@@ -44,5 +45,11 @@ public class TweetController {
 	 @GetMapping("/{id}/likes")
 	 public List<UserResponseDto> getUsersByTweetId(@PathVariable Long id) {
 		 return tweetService.getUsersByTweetId(id);
+	 }
+	 	 
+	 
+	 @GetMapping("/{id}/tags")
+	 public List<HashtagDto> getTweetsByTag(@PathVariable Long id){
+		 return tweetService.getHashtagByTweetId(id);
 	 }
 }
