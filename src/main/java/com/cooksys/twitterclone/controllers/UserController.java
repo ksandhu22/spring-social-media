@@ -1,5 +1,6 @@
 package com.cooksys.twitterclone.controllers;
 
+import com.cooksys.twitterclone.dtos.UserRequestDto;
 import com.cooksys.twitterclone.dtos.UserResponseDto;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -21,8 +22,13 @@ public class UserController {
 		 return userService.getAllUsers();
 	 }
 
+//	@PostMapping
+//	public UserResponseDto addUser(@RequestBody UserResponseDto newUser) {
+//		 return userService.addUser(newUser);
+//	}
+
 	@PostMapping
-	public UserResponseDto addUser(@RequestBody UserResponseDto newUser) {
-		 return userService.addUser(newUser);
+	public UserResponseDto addUser(@RequestBody UserRequestDto newUser) {
+		return userService.addUser(newUser);
 	}
 }

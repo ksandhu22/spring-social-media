@@ -1,5 +1,6 @@
 package com.cooksys.twitterclone.services;
 
+import com.cooksys.twitterclone.dtos.UserRequestDto;
 import com.cooksys.twitterclone.dtos.UserResponseDto;
 import com.cooksys.twitterclone.entities.User;
 
