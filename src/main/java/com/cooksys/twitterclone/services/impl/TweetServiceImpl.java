@@ -86,4 +86,11 @@ public class TweetServiceImpl implements TweetService {
 
         return userMapper.entitiesToDtos(foundTweet.get().getMentionedUsers().stream().filter(user -> !user.isDeleted()).toList());
     }
+
+    @Override
+    public List<TweetResponseDto> getRepostsByTweetId(Long id) throws NotFoundException {
+        Optional<Tweet> foundTweet = getOptionalTweetById(id);
+
+        return tweetMapper.entitiesToDtos(foundTweet.get().getReposts().stream().filter(tweet -> !tweet.isDeleted()).toList());
+    }
 }

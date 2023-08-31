@@ -58,7 +58,11 @@ public class TweetController {
 		 return tweetService.getUsersByMentions(id);
 	 }
 
-//	 @GetMapping("/{id}/reposts")
+	 @GetMapping("/{id}/reposts")
+	 public List<TweetResponseDto> getRepostsByTweetId(@PathVariable Long id) {
+		 return tweetService.getRepostsByTweetId(id);
+	 }
+
 //	 @GetMapping("/{id}/replies")
 //	 @GetMapping("/{id}/context")
 

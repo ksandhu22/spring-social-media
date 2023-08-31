@@ -20,4 +20,6 @@ public interface TweetService {
 	List<HashtagDto> getHashtagByTweetId(Long id) throws NotFoundException;
 
     List<UserResponseDto> getUsersByMentions(Long id) throws NotFoundException;
+
+    List<TweetResponseDto> getRepostsByTweetId(Long id) throws NotFoundException;
 }
