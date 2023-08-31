@@ -11,6 +11,9 @@ import java.util.List;
 @Repository
 public interface TweetRepository extends JpaRepository<Tweet, Long>{
     List<User> findByLikedByUsers(Long tweetId);
+
+//    List<Tweet> findByTweets(String label);
+
 //    List<User> findByLikedByUsersAndDeletedFalse(Long tweetId);
 
 //    List<User> findByLikedByUsersAndDeletedFalse(List<User> users, Boolean deleted);

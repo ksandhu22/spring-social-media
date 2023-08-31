@@ -30,7 +30,7 @@ public class Hashtag {
     @CreationTimestamp
     private Timestamp firstUsed;
     
-   @UpdateTimestamp
+    @UpdateTimestamp
     private Timestamp lastUsed;
     
     @ManyToMany(mappedBy= "hashtags")

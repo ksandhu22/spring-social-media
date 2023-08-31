@@ -3,6 +3,7 @@ package com.cooksys.twitterclone.services.impl;
 import java.util.List;
 import java.util.Optional;
 
+import com.cooksys.twitterclone.dtos.ContextDto;
 import org.springframework.stereotype.Service;
 
 import com.cooksys.twitterclone.dtos.HashtagDto;
@@ -99,5 +100,18 @@ public class TweetServiceImpl implements TweetService {
         Optional<Tweet> foundTweet = getOptionalTweetById(id);
 
         return tweetMapper.entitiesToDtos(foundTweet.get().getReplies().stream().filter(tweet -> !tweet.isDeleted()).toList());
+    }
+
+    @Override
+    public ContextDto getContextFromTweetById(Long id) throws NotFoundException {
+
+        Optional<Tweet> foundTweet = getOptionalTweetById(id);
+
+        ContextDto tweetContext = new ContextDto();
+        tweetContext.setTarget(tweetMapper.entityToDto(foundTweet.get()));
+        tweetContext.setBefore(getRepostsByTweetId(id));
+        tweetContext.setAfter(getRepliesByTweetId(id));
+
+        return tweetContext;
     }
 }
