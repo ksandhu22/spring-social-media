@@ -22,4 +22,6 @@ public interface TweetService {
     List<UserResponseDto> getUsersByMentions(Long id) throws NotFoundException;
 
     List<TweetResponseDto> getRepostsByTweetId(Long id) throws NotFoundException;
+
+    List<TweetResponseDto> getRepliesByTweetId(Long id) throws NotFoundException;
 }
