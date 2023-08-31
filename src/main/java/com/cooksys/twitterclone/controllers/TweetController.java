@@ -47,9 +47,19 @@ public class TweetController {
 		 return tweetService.getUsersByTweetId(id);
 	 }
 	 	 
-	 
+	 // maybe change name to getTagsByTweetId
 	 @GetMapping("/{id}/tags")
 	 public List<HashtagDto> getTweetsByTag(@PathVariable Long id){
 		 return tweetService.getHashtagByTweetId(id);
 	 }
+
+	 @GetMapping("/{id}/mentions")
+	 public List<UserResponseDto> getUsersByMentions(@PathVariable Long id) {
+		 return tweetService.getUsersByMentions(id);
+	 }
+
+//	 @GetMapping("/{id}/reposts")
+//	 @GetMapping("/{id}/replies")
+//	 @GetMapping("/{id}/context")
+
 }
