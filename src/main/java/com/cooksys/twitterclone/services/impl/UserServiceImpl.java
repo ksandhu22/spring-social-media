@@ -108,23 +108,13 @@ public class UserServiceImpl implements UserService {
 
 	@Override
 	public List<UserResponseDto> getFollowing(String user) {
-		User userToFollow = userRepository.findByUsername(user);
-		if (userToFollow == null || userToFollow.isDeleted()) {
+		Optional<User> userToFollow = userRepository.findByCredentialsUsername(user);
+		if (userToFollow.isEmpty() || userToFollow.get().isDeleted()) {
 			throw new NotFoundException("User does not exist");
 		}
 
-		return userMapper.entitiesToDtos(userToFollow.getFollowing());
+		return userMapper.entitiesToDtos(userToFollow.get().getFollowing());
 	}
-
-//	@Override
-//	public List<UserResponseDto> getFollowers(String user) {
-//		User userFollowingList = userRepository.findByUsername(user);
-//		if (userFollowingList == null || userFollowingList.isDeleted()) {
-//			throw new NotFoundException("User does not exist");
-//		}
-//
-//		return userMapper.entitiesToDtos(userFollowingList.getFollowing());
-//	}
 
 	@Override
 	public List<UserResponseDto> getFollowers(String user) {
@@ -133,7 +123,7 @@ public class UserServiceImpl implements UserService {
 			throw new NotFoundException("User does not exist");
 		}
 
-		return userMapper.entitiesToDtos(userFollowingList.get().getFollowing());
+		return userMapper.entitiesToDtos(userFollowingList.get().getFollowers());
 	}
 
 }
