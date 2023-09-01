@@ -36,10 +36,10 @@ public class UserController {
 		return userService.addUser(newUser);
 	}
 	
-//	@PatchMapping("/@{newName}")
-//	  public UserResponseDto updateUsername(@PathVariable String username,@PathVariable CredentialsDto credentials) {
-//		return userService.updateUsername(username, credentials); 
-//	  }
+	@PatchMapping("/@{newName}")
+	  public UserResponseDto updateUsername(@PathVariable String username,@PathVariable CredentialsDto credentials) {
+		return userService.updateUsername(username, credentials); 
+	  }
 	
 //	@GetMapping
 //	public boolean validateUsername() {
