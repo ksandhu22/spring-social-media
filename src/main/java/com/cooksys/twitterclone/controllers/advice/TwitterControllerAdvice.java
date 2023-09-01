@@ -1,6 +1,8 @@
 package com.cooksys.twitterclone.controllers.advice;
 
 import javax.servlet.http.HttpServletRequest;
+
+
 import com.cooksys.twitterclone.exceptions.NotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -27,3 +29,5 @@ public class TwitterControllerAdvice {
 		return new ErrorDto(notFoundException.getMessage());
 	}
 }
+
+

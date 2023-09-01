@@ -2,6 +2,7 @@ package com.cooksys.twitterclone.controllers;
 
 import java.util.List;
 
+import com.cooksys.twitterclone.exceptions.BadRequestException;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -30,20 +31,15 @@ public class UserController {
 		 return userService.getAllUsers();
 	 }
 
-//	@PostMapping
-//	public UserResponseDto addUser(@RequestBody UserResponseDto newUser) {
-//		 return userService.addUser(newUser);
-//	}
-
 	@PostMapping
 	public UserResponseDto addUser(@RequestBody UserRequestDto newUser) {
 		return userService.addUser(newUser);
 	}
 	
-	@PatchMapping("/@{newName}")
-	  public UserResponseDto updateUsername(@PathVariable String username,@PathVariable CredentialsDto credentials) {
-		return userService.updateUsername(username, credentials); 
-	  }
+//	@PatchMapping("/@{newName}")
+//	  public UserResponseDto updateUsername(@PathVariable String username,@PathVariable CredentialsDto credentials) {
+//		return userService.updateUsername(username, credentials); 
+//	  }
 	
 //	@GetMapping
 //	public boolean validateUsername() {
@@ -60,15 +56,15 @@ public class UserController {
 		return userService.getTweets(username);
 	}
 	
-	@GetMapping
-	public List<UserResponseDto> getFollowing(@PathVariable String user){
-		return userService.getFollowing(user);
-	}
-	
-	@GetMapping
-	public List<UserResponseDto> getFollowers(@PathVariable String user){
-		return userService.getFollowers(user);
-	}
+//	@GetMapping
+//	public List<UserResponseDto> getFollowing(@PathVariable String user){
+//		return userService.getFollowing(user);
+//	}
+//	
+//	@GetMapping
+//	public List<UserResponseDto> getFollowers(@PathVariable String user){
+//		return userService.getFollowers(user);
+//	}
 	
 	
 	

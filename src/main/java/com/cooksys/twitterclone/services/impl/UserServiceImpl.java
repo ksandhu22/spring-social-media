@@ -43,62 +43,20 @@ public class UserServiceImpl implements UserService {
 
 	@Override
 	public UserResponseDto addUser(UserRequestDto newUser) {
-		Optional<User> addedUser = userRepository.findByUsername(newUser.getCredentials().getUsername());
-
-		// User addedUser = userMapper.requestDtoToEntity(newUser);
-		if (newUser.getCredentials().getUsername() == null || newUser.getCredentials().getPassword() == null
-				|| newUser.getProfile().getEmail() == null) {
-			throw new BadRequestException("Necessary fields must not be empty");
-		}
-
-		if (!addedUser.get().isDeleted() && addedUser != null) {
-			throw new BadRequestException("This username already exists and is not deactivated");
-		}
-
-		if (addedUser.get().isDeleted() && addedUser != null) {
-			addedUser.get().setDeleted(false);
-			return userMapper.entityToDto(userRepository.saveAndFlush(addedUser.get()));
-		}
-
-		userRepository.saveAndFlush(addedUser.get());
-		return userMapper.entityToDto(addedUser.get());
-
+	    if(newUser.getCredentials() == null || newUser.getProfile() == null || newUser.getCredentials().getUsername() == null || newUser.getCredentials().getPassword() == null || newUser.getProfile().getEmail() == null) {
+	        throw new BadRequestException("Necessary fields must not be empty");
+	    }
+	    User hopefullyFound = userRepository.findByUsername(newUser.getCredentials().getUsername());
+	    if(hopefullyFound != null && !hopefullyFound.isDeleted()) {
+	        throw new BadRequestException("This username already exists and is not deactivated");
+	    }
+	    if(hopefullyFound != null && hopefullyFound.isDeleted()) {
+	        hopefullyFound.setDeleted(false);
+	        return userMapper.entityToDto(userRepository.saveAndFlush(hopefullyFound));
+	    }
+	    User addedUser = userMapper.requestDtoToEntity(newUser);
+	    return userMapper.entityToDto( userRepository.saveAndFlush(addedUser));
 	}
-
-//    	for(User user : userRepository.findAll()) {
-//    	    if(user.getCredentials().getUsername() == addedUser.getCredentials().getUsername() && user.isDeleted()) {
-//    	        addedUser.setDeleted(false);
-//    	        return userMapper.entityToDto(addedUser);
-//    	    }
-//    	    if(user.getCredentials().getUsername() == addedUser.getCredentials().getUsername() && !user.isDeleted()) {
-//    	        throw new BadRequestException("This username already exists and is not deactivated");
-//    	    }
-//    	}
-//    	userRepository.saveAndFlush(addedUser);
-//    	return userMapper.entityToDto(addedUser);
-
-//	@Override
-//	public boolean validateUsername() {
-//		// TODO Auto-generated method stub
-//		return false;
-//	}
-
-//	@Override
-//	public UserResponseDto updateUsername(String username, CredentialsDto credentials) {
-//		User user = userRepository.findByUsername(username);
-//		if(!userRepository.findAll().contains(user) || user.isDeleted()) {
-//			throw new NotFoundException("User not found");
-//		}
-//		
-//		if(!user.getCredentials().equals(credentialsMapper.credentialsDtoToEntity(credentials))) {
-//			throw new NotAuthorizedException("User not found");
-//		}
-//		
-//		user.getCredentials().setUsername(username);
-//		return userMapper.entityToResponseDto(user);
-//		
-//		
-//	}
 
 	@Override
 	public UserResponseDto getUser(String username) {
@@ -128,30 +86,42 @@ public class UserServiceImpl implements UserService {
 		return tweetMapper.entitiesToResponseDtos(userTweets);
 	}
 
-	@Override
-	public UserResponseDto updateUsername(String username, CredentialsDto credentials) {
-		// TODO Auto-generated method stub
-		return null;
-	}
+//	@Override
+//	public UserResponseDto updateUsername(String username, CredentialsDto credentials) {
+//		// TODO Auto-generated method stub
+//		return null;
+//	}
+//
+//	@Override
+//	public List<UserResponseDto> getFollowing(String user) {
+//		// TODO Auto-generated method stub
+//		return null;
+//	}
+//
+//	@Override
+//	public List<UserResponseDto> getFollowers(String user) {
+//		// TODO Auto-generated method stub
+//		return null;
+//	}
 
-	@Override
-	public List<UserResponseDto> getFollowing(String user) {
-		User user = userRepository.findByUsername(user);
-		if (user == null || user.isDeleted()) {
-			throw new NotFoundException("User does not exist");
-		}
-
-		return userMapper.entitiesToDtos(user.getFollowing());
-	}
-
-	@Override
-	public List<UserResponseDto> getFollowers(String user) {
-		User user = userRepository.findByUsername(user);
-		if (user == null || user.isDeleted()) {
-			throw new NotFoundException("User does not exist");
-		}
-
-		return userMapper.entitiesToDtos(user.getFollowing());
-	}
-
+//	@Override
+//	public List<UserResponseDto> getFollowing(String user) {
+//		User user = userRepository.findByUsername(user);
+//		if (user == null || user.isDeleted()) {
+//			throw new NotFoundException("User does not exist");
+//		}
+//
+//		return userMapper.entitiesToDtos(user.getFollowing());
+//	}
+//
+//	@Override
+//	public List<UserResponseDto> getFollowers(String user) {
+//		User user = userRepository.findByUsername(user);
+//		if (user == null || user.isDeleted()) {
+//			throw new NotFoundException("User does not exist");
+//		}
+//
+//		return userMapper.entitiesToDtos(user.getFollowing());
+//	}
+    
 }
