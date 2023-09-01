@@ -3,6 +3,7 @@ package com.cooksys.twitterclone.services;
 import com.cooksys.twitterclone.dtos.UserRequestDto;
 import com.cooksys.twitterclone.dtos.UserResponseDto;
 import com.cooksys.twitterclone.entities.User;
+import com.cooksys.twitterclone.exceptions.BadRequestException;
 
 import java.util.List;
 
@@ -10,5 +11,5 @@ public interface UserService {
 
     List<UserResponseDto> getAllUsers();
 
-    UserResponseDto addUser(UserRequestDto newUser);
+    UserResponseDto addUser(UserRequestDto newUser) throws BadRequestException;
 }

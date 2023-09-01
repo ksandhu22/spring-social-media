@@ -3,6 +3,7 @@ package com.cooksys.twitterclone.services.impl;
 import com.cooksys.twitterclone.dtos.UserRequestDto;
 import com.cooksys.twitterclone.dtos.UserResponseDto;
 import com.cooksys.twitterclone.entities.User;
+import com.cooksys.twitterclone.exceptions.BadRequestException;
 import com.cooksys.twitterclone.mappers.UserMapper;
 import com.cooksys.twitterclone.repositories.UserRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -29,41 +30,34 @@ public class UserServiceImpl implements UserService{
     }
 
     @Override
-    public UserResponseDto addUser(UserRequestDto newUser) {
-
-//        {
-    //            "credentials": {
-    //            "username": "{{firstUser}}",
-    //                    "password": "{{password}}"
-    //        },
-    //            "profile": {
-    //            "email": "{{firstUserEmail}}",
-    //                    "firstName": "{{firstUserFirstName}}",
-    //                    "lastName": "{{firstUserLastName}}",
-    //                    "phone": "{{firstUserPhone}}"
-    //        }
-//        }
+    public UserResponseDto addUser(UserRequestDto newUser) throws BadRequestException {
 
         User addedUser = userMapper.requestDtoToEntity(newUser);
-//        Optional<User> foundUser = userRepository.findById(addedUser.getId());
-//
-//        if(foundUser.get().isDeleted()) {
-//
-//        }
 
-        // gets the username addedUser.getCredentials().getUsername();
+        if(addedUser.getCredentials().getUsername() == null || addedUser.getCredentials().getPassword() == null || addedUser.getProfile().getEmail() == null) {
+            throw new BadRequestException("Necessary fields must not be empty");
+        }
+
+        for(User user : userRepository.findAll()) {
+            if(user.getCredentials().getUsername() == addedUser.getCredentials().getUsername() && user.isDeleted()) {
+                addedUser.setDeleted(false);
+                return userMapper.entityToDto(addedUser);
+            }
+
+            if(user.getCredentials().getUsername() == addedUser.getCredentials().getUsername() && !user.isDeleted()) {
+                throw new BadRequestException("This username already exists and is not deactivated");
+            }
+        }
+
+        userRepository.saveAndFlush(addedUser);
+        return userMapper.entityToDto(addedUser);
+
+
+
         // if this username already exists, and the deleted field is true, change the deleted field to false (reactivate the account)
         // if the username already exists, and the deleted field is false, throw error
         // if required fields are empty (null?) throw error
         // if it looks good, add it
-
-        userRepository.save(addedUser);
-        return userMapper.entityToDto(addedUser);
     }
-    
-    
-    
-    
-    
-    
+
 }
