@@ -15,6 +15,8 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
 	Optional<User> findByCredentials(String username);
 
+	Optional<User> findByUsername(String username);
+
 	//Why doesn't this work?
 	//User findByUsername(String username);
 

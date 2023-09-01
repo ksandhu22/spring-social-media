@@ -19,5 +19,9 @@ public interface UserService {
 
 	UserResponseDto getUser(String username);
 
+	List<UserResponseDto> getFollowing(String user);
+
+	List<UserResponseDto> getFollowers(String user);
+
 //	boolean validateUsername();
 }

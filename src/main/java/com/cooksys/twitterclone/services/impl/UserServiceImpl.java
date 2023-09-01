@@ -6,9 +6,11 @@ import com.cooksys.twitterclone.dtos.UserRequestDto;
 import com.cooksys.twitterclone.dtos.UserResponseDto;
 import com.cooksys.twitterclone.entities.Tweet;
 import com.cooksys.twitterclone.entities.User;
+import com.cooksys.twitterclone.exceptions.BadRequestException;
 import com.cooksys.twitterclone.exceptions.NotAuthorizedException;
 import com.cooksys.twitterclone.exceptions.NotFoundException;
 import com.cooksys.twitterclone.mappers.CredentialsMapper;
+import com.cooksys.twitterclone.mappers.ProfileMapper;
 import com.cooksys.twitterclone.mappers.TweetMapper;
 import com.cooksys.twitterclone.mappers.UserMapper;
 import com.cooksys.twitterclone.repositories.UserRepository;
@@ -25,53 +27,55 @@ import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
-public class UserServiceImpl implements UserService{
+public class UserServiceImpl implements UserService {
 
-    private final UserRepository userRepository;
-    private final UserMapper userMapper;
-    private final CredentialsMapper credentialsMapper;
-    private final TweetMapper tweetMapper;
-    
-    @Override
-    public List<UserResponseDto> getAllUsers() {
+	private final UserRepository userRepository;
+	private final UserMapper userMapper;
+	private final ProfileMapper profileMapper;
+	private final CredentialsMapper credentialsMapper;
+	private final TweetMapper tweetMapper;
 
-         return userMapper.entitiesToDtos(userRepository.findAll().stream().filter(user -> !user.isDeleted()).toList());
-    }
+	@Override
+	public List<UserResponseDto> getAllUsers() {
 
-    @Override
-    public UserResponseDto addUser(UserRequestDto newUser) {
+		return userMapper.entitiesToDtos(userRepository.findAll().stream().filter(user -> !user.isDeleted()).toList());
+	}
 
-//        {
-    //            "credentials": {
-    //            "username": "{{firstUser}}",
-    //                    "password": "{{password}}"
-    //        },
-    //            "profile": {
-    //            "email": "{{firstUserEmail}}",
-    //                    "firstName": "{{firstUserFirstName}}",
-    //                    "lastName": "{{firstUserLastName}}",
-    //                    "phone": "{{firstUserPhone}}"
-    //        }
-//        }
+	@Override
+	public UserResponseDto addUser(UserRequestDto newUser) {
+		Optional<User> addedUser = userRepository.findByUsername(newUser.getCredentials().getUsername());
 
-        User addedUser = userMapper.requestDtoToEntity(newUser);
-//        Optional<User> foundUser = userRepository.findById(addedUser.getId());
-//
-//        if(foundUser.get().isDeleted()) {
-//
-//        }
+		// User addedUser = userMapper.requestDtoToEntity(newUser);
+		if (newUser.getCredentials().getUsername() == null || newUser.getCredentials().getPassword() == null
+				|| newUser.getProfile().getEmail() == null) {
+			throw new BadRequestException("Necessary fields must not be empty");
+		}
 
-        // gets the username addedUser.getCredentials().getUsername();
-        // if this username already exists, and the deleted field is true, change the deleted field to false (reactivate the account)
-        // if the username already exists, and the deleted field is false, throw error
-        // if required fields are empty (null?) throw error
-        // if it looks good, add it
+		if (!addedUser.get().isDeleted() && addedUser != null) {
+			throw new BadRequestException("This username already exists and is not deactivated");
+		}
 
-        userRepository.save(addedUser);
-        return userMapper.entityToDto(addedUser);
-    }
+		if (addedUser.get().isDeleted() && addedUser != null) {
+			addedUser.get().setDeleted(false);
+			return userMapper.entityToDto(userRepository.saveAndFlush(addedUser.get()));
+		}
 
+		userRepository.saveAndFlush(addedUser.get());
+		return userMapper.entityToDto(addedUser.get());
 
+	}
+
+//    	for(User user : userRepository.findAll()) {
+//    	    if(user.getCredentials().getUsername() == addedUser.getCredentials().getUsername() && user.isDeleted()) {
+//    	        addedUser.setDeleted(false);
+//    	        return userMapper.entityToDto(addedUser);
+//    	    }
+//    	    if(user.getCredentials().getUsername() == addedUser.getCredentials().getUsername() && !user.isDeleted()) {
+//    	        throw new BadRequestException("This username already exists and is not deactivated");
+//    	    }
+//    	}
+//    	userRepository.saveAndFlush(addedUser);
+//    	return userMapper.entityToDto(addedUser);
 
 //	@Override
 //	public boolean validateUsername() {
@@ -95,32 +99,32 @@ public class UserServiceImpl implements UserService{
 //		
 //		
 //	}
-    
-    @Override
+
+	@Override
 	public UserResponseDto getUser(String username) {
-    	Optional<User> findUser = userRepository.findByCredentials(username);
-		if(findUser.isEmpty()){
+		Optional<User> findUser = userRepository.findByCredentials(username);
+		if (findUser.isEmpty()) {
 			throw new NotFoundException("User is not found");
-		
+
 		}
-		
+
 		User user = findUser.get();
-		
-		//Return user not list 
+
+		// Return user not list
 		return userMapper.entityToDto(user);
 	}
 
 	@Override
 	public List<TweetResponseDto> getTweets(String username) {
 		Optional<User> findUser = userRepository.findByCredentials(username);
-		if(findUser.isEmpty()){
+		if (findUser.isEmpty()) {
 			throw new NotFoundException("User is not found");
-		
+
 		}
-		
+
 		User user = findUser.get();
 		List<Tweet> userTweets = new ArrayList<>(user.getTweets());
-		
+
 		return tweetMapper.entitiesToResponseDtos(userTweets);
 	}
 
@@ -130,11 +134,24 @@ public class UserServiceImpl implements UserService{
 		return null;
 	}
 
-	
-    
-    
-    
-    
-    
-    
+	@Override
+	public List<UserResponseDto> getFollowing(String user) {
+		User user = userRepository.findByUsername(user);
+		if (user == null || user.isDeleted()) {
+			throw new NotFoundException("User does not exist");
+		}
+
+		return userMapper.entitiesToDtos(user.getFollowing());
+	}
+
+	@Override
+	public List<UserResponseDto> getFollowers(String user) {
+		User user = userRepository.findByUsername(user);
+		if (user == null || user.isDeleted()) {
+			throw new NotFoundException("User does not exist");
+		}
+
+		return userMapper.entitiesToDtos(user.getFollowing());
+	}
+
 }
