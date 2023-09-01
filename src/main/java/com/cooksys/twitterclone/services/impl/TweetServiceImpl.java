@@ -7,6 +7,8 @@ import java.util.regex.Pattern;
 
 import com.cooksys.twitterclone.dtos.*;
 import com.cooksys.twitterclone.entities.User;
+import com.cooksys.twitterclone.exceptions.BadRequestException;
+import com.cooksys.twitterclone.repositories.UserRepository;
 import org.springframework.stereotype.Service;
 
 import com.cooksys.twitterclone.entities.Hashtag;
@@ -31,6 +33,7 @@ public class TweetServiceImpl implements TweetService {
     private final TweetMapper tweetMapper;
     private final UserMapper userMapper;
     private final HashtagMapper hashtagMapper;
+    private final UserRepository userRepository;
 
     public Optional<Tweet> getOptionalTweetById(Long id) throws NotFoundException{
 
@@ -51,14 +54,39 @@ public class TweetServiceImpl implements TweetService {
 
 	@Override
 	public TweetResponseDto addTweet(TweetRequestDto newTweet) {
+//        public class TweetRequestDto {
+//            private String content;
+//            private CredentialsDto credentials;
+//        }
+//        public class CredentialsDto {
+//            private String username;
+//
+//            private String password;
+//        }
+
 //        Creates a new simple tweet, with the author set to the user identified by the credentials in the request body.
 //        If the given credentials do not match an active user in the database, an error should be sent in lieu of a response.
 //        The response should contain the newly-created tweet.
 //        Because this always creates a simple tweet, it must have a content property and may not have inReplyTo or repostOf properties.
+
+
 //        IMPORTANT: when a tweet with content is created, the server must process the tweet's content for @{username} mentions and #{hashtag} tags.
 //        There is no way to create hashtags or create mentions from the API, so this must be handled automatically!
-        Tweet addedTweet = tweetMapper.requestDtoToEntity(newTweet);
-        return tweetMapper.entityToDto(tweetRepository.saveAndFlush(addedTweet));
+
+        // find the author that made the tweet
+        // get credentials/username from newTweet
+        // find that whole user entity
+        // add that user to the author of tweet
+
+        User foundAuthor = userRepository.findByUsername(newTweet.getCredentials().getUsername());
+
+        if(foundAuthor.getCredentials() == null) {
+            throw new BadRequestException("user does not exist");
+        }
+
+        Tweet tweet = new Tweet();
+        tweet.setAuthor(foundAuthor);
+        return tweetMapper.entityToDto(tweet);
 
     //        public class Main {
     //            public static void main(String[] args) {

@@ -114,10 +114,10 @@ public class UserServiceImpl implements UserService{
 		return tweetMapper.entitiesToResponseDtos(userTweets);
 	}
 
-	@Override
-	public UserResponseDto updateUsername(String username, CredentialsDto credentials) {
-		// TODO Auto-generated method stub
-		return null;
-	}
+//	@Override
+//	public UserResponseDto updateUsername(String username, CredentialsDto credentials) {
+//		// TODO Auto-generated method stub
+//		return null;
+//	}
     
 }
