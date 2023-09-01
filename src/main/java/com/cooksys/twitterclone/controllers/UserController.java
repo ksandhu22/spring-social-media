@@ -56,15 +56,15 @@ public class UserController {
 		return userService.getTweets(username);
 	}
 	
-//	@GetMapping
-//	public List<UserResponseDto> getFollowing(@PathVariable String user){
-//		return userService.getFollowing(user);
-//	}
-//	
-//	@GetMapping
-//	public List<UserResponseDto> getFollowers(@PathVariable String user){
-//		return userService.getFollowers(user);
-//	}
+	@GetMapping("/@{username}/following")
+	public List<UserResponseDto> getFollowing(@PathVariable String user){
+		return userService.getFollowing(user);
+	}
+	
+	@GetMapping("/@{username}/followers")
+	public List<UserResponseDto> getFollowers(@PathVariable String user){
+		return userService.getFollowers(user);
+	}
 	
 	
 	
