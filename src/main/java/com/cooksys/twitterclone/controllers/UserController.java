@@ -36,10 +36,10 @@ public class UserController {
 		return userService.addUser(newUser);
 	}
 	
-	@PatchMapping("/@{newName}")
-	  public UserResponseDto updateUsername(@PathVariable String username,@PathVariable CredentialsDto credentials) {
-		return userService.updateUsername(username, credentials); 
-	  }
+//	@PatchMapping("/@{newName}")
+//	  public UserResponseDto updateUsername(@PathVariable String username,@PathVariable CredentialsDto credentials) {
+//		return userService.updateUsername(username, credentials); 
+//	  }
 	
 //	@GetMapping
 //	public boolean validateUsername() {
@@ -55,6 +55,16 @@ public class UserController {
 	public List<TweetResponseDto> getTweets(@PathVariable String username){
 		return userService.getTweets(username);
 	}
+	
+//	@GetMapping
+//	public List<UserResponseDto> getFollowing(@PathVariable String user){
+//		return userService.getFollowing(user);
+//	}
+//	
+//	@GetMapping
+//	public List<UserResponseDto> getFollowers(@PathVariable String user){
+//		return userService.getFollowers(user);
+//	}
 	
 	
 	
