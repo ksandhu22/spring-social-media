@@ -1,15 +1,23 @@
 package com.cooksys.twitterclone.services;
 
+import java.util.List;
+
+import com.cooksys.twitterclone.dtos.CredentialsDto;
+import com.cooksys.twitterclone.dtos.TweetResponseDto;
 import com.cooksys.twitterclone.dtos.UserRequestDto;
 import com.cooksys.twitterclone.dtos.UserResponseDto;
-import com.cooksys.twitterclone.entities.User;
-import com.cooksys.twitterclone.exceptions.BadRequestException;
-
-import java.util.List;
 
 public interface UserService {
 
     List<UserResponseDto> getAllUsers();
 
-    UserResponseDto addUser(UserRequestDto newUser) throws BadRequestException;
+    UserResponseDto addUser(UserRequestDto newUser);
+
+	UserResponseDto updateUsername(String username, CredentialsDto credentials);
+
+	List<TweetResponseDto> getTweets(String username);
+
+	UserResponseDto getUser(String username);
+
+//	boolean validateUsername();
 }

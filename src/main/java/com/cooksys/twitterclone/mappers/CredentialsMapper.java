@@ -12,4 +12,5 @@ import java.util.List;
 public interface CredentialsMapper {
     CredentialsDto entityToDto(Credentials credentials);
     Credentials dtoToEntity(CredentialsDto credentialsDto);
+	
 }
