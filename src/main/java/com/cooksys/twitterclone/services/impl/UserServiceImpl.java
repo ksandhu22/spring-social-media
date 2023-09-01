@@ -6,6 +6,7 @@ import com.cooksys.twitterclone.dtos.UserRequestDto;
 import com.cooksys.twitterclone.dtos.UserResponseDto;
 import com.cooksys.twitterclone.entities.Tweet;
 import com.cooksys.twitterclone.entities.User;
+import com.cooksys.twitterclone.exceptions.BadRequestException;
 import com.cooksys.twitterclone.exceptions.NotAuthorizedException;
 import com.cooksys.twitterclone.exceptions.NotFoundException;
 import com.cooksys.twitterclone.mappers.CredentialsMapper;
@@ -41,34 +42,23 @@ public class UserServiceImpl implements UserService{
     @Override
     public UserResponseDto addUser(UserRequestDto newUser) {
 
-//        {
-    //            "credentials": {
-    //            "username": "{{firstUser}}",
-    //                    "password": "{{password}}"
-    //        },
-    //            "profile": {
-    //            "email": "{{firstUserEmail}}",
-    //                    "firstName": "{{firstUserFirstName}}",
-    //                    "lastName": "{{firstUserLastName}}",
-    //                    "phone": "{{firstUserPhone}}"
-    //        }
-//        }
+        if(newUser.getCredentials() == null || newUser.getProfile() == null || newUser.getCredentials().getUsername() == null || newUser.getCredentials().getPassword() == null || newUser.getProfile().getEmail() == null) {
+            throw new BadRequestException("Necessary fields must not be empty");
+        }
+
+        User hopefullyFound = userRepository.findByUsername(newUser.getCredentials().getUsername());
+
+        if(hopefullyFound != null && !hopefullyFound.isDeleted()) {
+            throw new BadRequestException("This username already exists and is not deactivated");
+        }
+
+        if(hopefullyFound != null && hopefullyFound.isDeleted()) {
+            hopefullyFound.setDeleted(false);
+            return userMapper.entityToDto(userRepository.saveAndFlush(hopefullyFound));
+        }
 
         User addedUser = userMapper.requestDtoToEntity(newUser);
-//        Optional<User> foundUser = userRepository.findById(addedUser.getId());
-//
-//        if(foundUser.get().isDeleted()) {
-//
-//        }
-
-        // gets the username addedUser.getCredentials().getUsername();
-        // if this username already exists, and the deleted field is true, change the deleted field to false (reactivate the account)
-        // if the username already exists, and the deleted field is false, throw error
-        // if required fields are empty (null?) throw error
-        // if it looks good, add it
-
-        userRepository.save(addedUser);
-        return userMapper.entityToDto(addedUser);
+        return userMapper.entityToDto( userRepository.saveAndFlush(addedUser));
     }
 
 
@@ -129,12 +119,5 @@ public class UserServiceImpl implements UserService{
 		// TODO Auto-generated method stub
 		return null;
 	}
-
-	
-    
-    
-    
-    
-    
     
 }

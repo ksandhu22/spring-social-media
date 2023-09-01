@@ -2,6 +2,7 @@ package com.cooksys.twitterclone.controllers;
 
 import java.util.List;
 
+import com.cooksys.twitterclone.exceptions.BadRequestException;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -29,11 +30,6 @@ public class UserController {
 	 public List<UserResponseDto> getAllUsers() {
 		 return userService.getAllUsers();
 	 }
-
-//	@PostMapping
-//	public UserResponseDto addUser(@RequestBody UserResponseDto newUser) {
-//		 return userService.addUser(newUser);
-//	}
 
 	@PostMapping
 	public UserResponseDto addUser(@RequestBody UserRequestDto newUser) {
