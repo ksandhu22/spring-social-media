@@ -2,10 +2,7 @@ package com.cooksys.twitterclone.services;
 
 import java.util.List;
 
-import com.cooksys.twitterclone.dtos.ContextDto;
-import com.cooksys.twitterclone.dtos.HashtagDto;
-import com.cooksys.twitterclone.dtos.TweetResponseDto;
-import com.cooksys.twitterclone.dtos.UserResponseDto;
+import com.cooksys.twitterclone.dtos.*;
 import com.cooksys.twitterclone.exceptions.NotFoundException;
 
 public interface TweetService {
@@ -27,4 +24,6 @@ public interface TweetService {
     List<TweetResponseDto> getRepliesByTweetId(Long id) throws NotFoundException;
 
     ContextDto getContextFromTweetById(Long id) throws NotFoundException;
+
+    TweetResponseDto addTweet(TweetRequestDto newTweet);
 }

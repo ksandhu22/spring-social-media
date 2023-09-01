@@ -2,13 +2,13 @@ package com.cooksys.twitterclone.services.impl;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
-import com.cooksys.twitterclone.dtos.ContextDto;
+import com.cooksys.twitterclone.dtos.*;
+import com.cooksys.twitterclone.entities.User;
 import org.springframework.stereotype.Service;
 
-import com.cooksys.twitterclone.dtos.HashtagDto;
-import com.cooksys.twitterclone.dtos.TweetResponseDto;
-import com.cooksys.twitterclone.dtos.UserResponseDto;
 import com.cooksys.twitterclone.entities.Hashtag;
 import com.cooksys.twitterclone.entities.Tweet;
 import com.cooksys.twitterclone.exceptions.NotFoundException;
@@ -17,6 +17,9 @@ import com.cooksys.twitterclone.mappers.TweetMapper;
 import com.cooksys.twitterclone.mappers.UserMapper;
 import com.cooksys.twitterclone.repositories.TweetRepository;
 import com.cooksys.twitterclone.services.TweetService;
+
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import lombok.RequiredArgsConstructor;
 
@@ -46,12 +49,31 @@ public class TweetServiceImpl implements TweetService {
     }
 
 
-//	@Override
-//	public TweetResponseDto createTweet(TweetResponseDto newTweet) {
-//		tweetRepository.save(tweetMapper.dtoToEntity(newTweet));
-//        return newTweet;
-//	}
+	@Override
+	public TweetResponseDto addTweet(TweetRequestDto newTweet) {
+//        Creates a new simple tweet, with the author set to the user identified by the credentials in the request body.
+//        If the given credentials do not match an active user in the database, an error should be sent in lieu of a response.
+//        The response should contain the newly-created tweet.
+//        Because this always creates a simple tweet, it must have a content property and may not have inReplyTo or repostOf properties.
+//        IMPORTANT: when a tweet with content is created, the server must process the tweet's content for @{username} mentions and #{hashtag} tags.
+//        There is no way to create hashtags or create mentions from the API, so this must be handled automatically!
+        Tweet addedTweet = tweetMapper.requestDtoToEntity(newTweet);
+        return tweetMapper.entityToDto(tweetRepository.saveAndFlush(addedTweet));
 
+    //        public class Main {
+    //            public static void main(String[] args) {
+    //                Pattern pattern = Pattern.compile("w3schools", Pattern.CASE_INSENSITIVE);
+    //                Matcher matcher = pattern.matcher("Visit W3Schools!");
+    //                boolean matchFound = matcher.find();
+    //                if(matchFound) {
+    //                    System.out.println("Match found");
+    //                } else {
+    //                    System.out.println("Match not found");
+    //                }
+    //            }
+    //        }
+    //        Outputs Match found
+	}
 
     @Override
     public TweetResponseDto getTweetById(Long id) throws NotFoundException{

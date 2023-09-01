@@ -2,15 +2,9 @@ package com.cooksys.twitterclone.controllers;
 
 import java.util.List;
 
-import com.cooksys.twitterclone.dtos.ContextDto;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import com.cooksys.twitterclone.dtos.*;
+import org.springframework.web.bind.annotation.*;
 
-import com.cooksys.twitterclone.dtos.HashtagDto;
-import com.cooksys.twitterclone.dtos.TweetResponseDto;
-import com.cooksys.twitterclone.dtos.UserResponseDto;
 import com.cooksys.twitterclone.services.TweetService;
 
 import lombok.RequiredArgsConstructor;
@@ -27,15 +21,10 @@ public class TweetController {
 		 return tweetService.getAllTweets();
 	 }
 
-	 //@PostMapping
-//		public QuizResponseDto createQuiz(@RequestBody QuizRequestDto newQuiz) {
-//			return quizService.createQuiz(newQuiz);
-//		}
-//	 @PostMapping
-//	 public TweetResponseDto createTweet(@RequestBody TweetResponseDto newTweet) {
-//		 return tweetService.createTweet(newTweet);
-//	 }
-//	 
+	 @PostMapping
+	 public TweetResponseDto addTweet(@RequestBody TweetRequestDto newTweet) {
+		 return tweetService.addTweet(newTweet);
+	 }
 
 	 @GetMapping("/{id}")
 	 public TweetResponseDto getTweetById(@PathVariable Long id) {
