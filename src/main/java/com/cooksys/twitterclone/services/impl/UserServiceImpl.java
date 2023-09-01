@@ -40,6 +40,8 @@ public class UserServiceImpl implements UserService {
 
 		return userMapper.entitiesToDtos(userRepository.findAll().stream().filter(user -> !user.isDeleted()).toList());
 	}
+	
+	
 
 	@Override
 	public UserResponseDto addUser(UserRequestDto newUser) {
@@ -91,37 +93,25 @@ public class UserServiceImpl implements UserService {
 //		// TODO Auto-generated method stub
 //		return null;
 //	}
-//
-//	@Override
-//	public List<UserResponseDto> getFollowing(String user) {
-//		// TODO Auto-generated method stub
-//		return null;
-//	}
-//
-//	@Override
-//	public List<UserResponseDto> getFollowers(String user) {
-//		// TODO Auto-generated method stub
-//		return null;
-//	}
 
-//	@Override
-//	public List<UserResponseDto> getFollowing(String user) {
-//		User user = userRepository.findByUsername(user);
-//		if (user == null || user.isDeleted()) {
-//			throw new NotFoundException("User does not exist");
-//		}
-//
-//		return userMapper.entitiesToDtos(user.getFollowing());
-//	}
-//
-//	@Override
-//	public List<UserResponseDto> getFollowers(String user) {
-//		User user = userRepository.findByUsername(user);
-//		if (user == null || user.isDeleted()) {
-//			throw new NotFoundException("User does not exist");
-//		}
-//
-//		return userMapper.entitiesToDtos(user.getFollowing());
-//	}
+	@Override
+	public List<UserResponseDto> getFollowing(String user) {
+		User userToFollow = userRepository.findByUsername(user);
+		if (userToFollow == null || userToFollow.isDeleted()) {
+			throw new NotFoundException("User does not exist");
+		}
+
+		return userMapper.entitiesToDtos(userToFollow.getFollowing());
+	}
+
+	@Override
+	public List<UserResponseDto> getFollowers(String user) {
+		User userFollowingList = userRepository.findByUsername(user);
+		if (userFollowingList == null || userFollowingList.isDeleted()) {
+			throw new NotFoundException("User does not exist");
+		}
+
+		return userMapper.entitiesToDtos(userFollowingList.getFollowing());
+	}
     
 }
