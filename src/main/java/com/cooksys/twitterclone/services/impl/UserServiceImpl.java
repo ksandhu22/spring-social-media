@@ -21,6 +21,7 @@ import com.cooksys.twitterclone.services.UserService;
 
 import lombok.RequiredArgsConstructor;
 
+import javax.swing.text.html.Option;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -115,17 +116,24 @@ public class UserServiceImpl implements UserService {
 		return userMapper.entitiesToDtos(userToFollow.getFollowing());
 	}
 
+//	@Override
+//	public List<UserResponseDto> getFollowers(String user) {
+//		User userFollowingList = userRepository.findByUsername(user);
+//		if (userFollowingList == null || userFollowingList.isDeleted()) {
+//			throw new NotFoundException("User does not exist");
+//		}
+//
+//		return userMapper.entitiesToDtos(userFollowingList.getFollowing());
+//	}
+
 	@Override
 	public List<UserResponseDto> getFollowers(String user) {
-		User userFollowingList = userRepository.findByUsername(user);
-		if (userFollowingList == null || userFollowingList.isDeleted()) {
+		Optional<User> userFollowingList = userRepository.findByCredentialsUsername(user);
+		if (userFollowingList.isEmpty() || userFollowingList.get().isDeleted()) {
 			throw new NotFoundException("User does not exist");
 		}
 
-		return userMapper.entitiesToDtos(userFollowingList.getFollowing());
+		return userMapper.entitiesToDtos(userFollowingList.get().getFollowing());
 	}
-	
-	
-	
-    
+
 }
