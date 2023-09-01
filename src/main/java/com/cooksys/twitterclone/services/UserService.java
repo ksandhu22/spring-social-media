@@ -13,15 +13,15 @@ public interface UserService {
 
     UserResponseDto addUser(UserRequestDto newUser);
 
-	UserResponseDto updateUsername(String username, CredentialsDto credentials);
+	UserResponseDto updateUsername(String username, UserRequestDto user);
 
 	List<TweetResponseDto> getTweets(String username);
 
 	UserResponseDto getUser(String username);
 
-	List<UserResponseDto> getFollowing(String user);
+	List<UserResponseDto> getFollowing(String username);
 
-	List<UserResponseDto> getFollowers(String user);
+	List<UserResponseDto> getFollowers(String username);
 
 //	boolean validateUsername();
 }

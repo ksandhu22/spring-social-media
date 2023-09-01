@@ -36,9 +36,9 @@ public class UserController {
 		return userService.addUser(newUser);
 	}
 	
-	@PatchMapping("/@{newName}")
-	  public UserResponseDto updateUsername(@PathVariable String username,@PathVariable CredentialsDto credentials) {
-		return userService.updateUsername(username, credentials); 
+	@PatchMapping("/@{username}")
+	  public UserResponseDto updateUsername(@PathVariable String username, @RequestBody UserRequestDto user) {
+		return userService.updateUsername(username, user); 
 	  }
 	
 //	@GetMapping
