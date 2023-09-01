@@ -97,7 +97,7 @@ public class UserServiceImpl implements UserService{
 //	}
     
     @Override
-	public List<UserResponseDto> getUser(String username) {
+	public UserResponseDto getUser(String username) {
     	Optional<User> findUser = userRepository.findByCredentials(username);
 		if(findUser.isEmpty()){
 			throw new NotFoundException("User is not found");

@@ -17,7 +17,7 @@ public interface UserService {
 
 	List<TweetResponseDto> getTweets(String username);
 
-	List<UserResponseDto> getUser(String username);
+	UserResponseDto getUser(String username);
 
 //	boolean validateUsername();
 }
