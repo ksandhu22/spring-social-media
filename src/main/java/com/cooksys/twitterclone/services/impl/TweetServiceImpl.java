@@ -1,14 +1,16 @@
 package com.cooksys.twitterclone.services.impl;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
+import java.util.regex.*;
 
 import com.cooksys.twitterclone.dtos.*;
 import com.cooksys.twitterclone.entities.User;
 import com.cooksys.twitterclone.exceptions.BadRequestException;
+import com.cooksys.twitterclone.repositories.HashtagRepository;
 import com.cooksys.twitterclone.repositories.UserRepository;
+import com.cooksys.twitterclone.services.UserService;
 import org.springframework.stereotype.Service;
 
 import com.cooksys.twitterclone.entities.Hashtag;
@@ -34,6 +36,53 @@ public class TweetServiceImpl implements TweetService {
     private final UserMapper userMapper;
     private final HashtagMapper hashtagMapper;
     private final UserRepository userRepository;
+    private final UserService userService;
+    private final HashtagRepository hashtagRepository;
+
+    public void parseForUserMentions(Tweet tweet) {
+        Pattern pattern = Pattern.compile("@\\w+", Pattern.CASE_INSENSITIVE);
+        Matcher matcher = pattern.matcher(tweet.getContent());
+
+        List<User> mentionedUsers = new ArrayList<>();
+
+        matcher.results().forEach(matchResult -> {
+            String username = matchResult.group().substring(1);
+            userRepository.findAll()
+                    .stream()
+                    .filter(user -> user.getCredentials().getUsername().equals(username))
+                    .forEach(user -> {
+                        mentionedUsers.add(user);
+                        user.getMentionedTweets().add(tweet);
+                    });
+        });
+
+        tweet.getMentionedUsers().addAll(mentionedUsers);
+        tweetRepository.saveAndFlush(tweet);
+        userRepository.saveAllAndFlush(mentionedUsers);
+
+    }
+
+    public void parseForHashtags(Tweet tweet) {
+        Pattern pattern = Pattern.compile("@\\w+", Pattern.CASE_INSENSITIVE);
+        Matcher matcher = pattern.matcher(tweet.getContent());
+
+        List<Hashtag> hashtags = new ArrayList<>();
+
+        matcher.results().forEach(matchResult -> {
+            String hashtag = matchResult.group().substring(1);
+            hashtagRepository.findAll()
+                    .stream()
+                    .filter(hashtag1 -> hashtag1.getLabel().equals(hashtag))
+                    .forEach(hashtag1 -> {
+                        hashtags.add(hashtag1);
+                        hashtag1.getTweets().add(tweet);
+                    });
+        });
+
+        tweet.getHashtags().addAll(hashtags);
+        tweetRepository.saveAndFlush(tweet);
+        hashtagRepository.saveAllAndFlush(hashtags);
+    }
 
     public Optional<Tweet> getOptionalTweetById(Long id) throws NotFoundException{
 
@@ -54,53 +103,24 @@ public class TweetServiceImpl implements TweetService {
 
 	@Override
 	public TweetResponseDto addTweet(TweetRequestDto newTweet) {
-//        public class TweetRequestDto {
-//            private String content;
-//            private CredentialsDto credentials;
+
+        Optional<User> foundAuthor = Optional.ofNullable(userRepository.findByUsername(newTweet.getCredentials().getUsername()));
+
+        // Optional<User> foundAuthor = Optional.ofNullable(foundAuthorEntity);
+
+//        if(foundAuthor.getCredentials() == null) {
+//            throw new BadRequestException("user does not exist");
 //        }
-//        public class CredentialsDto {
-//            private String username;
-//
-//            private String password;
-//        }
 
-//        Creates a new simple tweet, with the author set to the user identified by the credentials in the request body.
-//        If the given credentials do not match an active user in the database, an error should be sent in lieu of a response.
-//        The response should contain the newly-created tweet.
-//        Because this always creates a simple tweet, it must have a content property and may not have inReplyTo or repostOf properties.
-
-
-//        IMPORTANT: when a tweet with content is created, the server must process the tweet's content for @{username} mentions and #{hashtag} tags.
-//        There is no way to create hashtags or create mentions from the API, so this must be handled automatically!
-
-        // find the author that made the tweet
-        // get credentials/username from newTweet
-        // find that whole user entity
-        // add that user to the author of tweet
-
-        User foundAuthor = userRepository.findByUsername(newTweet.getCredentials().getUsername());
-
-        if(foundAuthor.getCredentials() == null) {
+        if(foundAuthor.isEmpty()) {
             throw new BadRequestException("user does not exist");
         }
 
         Tweet tweet = new Tweet();
-        tweet.setAuthor(foundAuthor);
+        tweet.setAuthor(foundAuthor.get());
+        parseForUserMentions(tweet);
+        parseForHashtags(tweet);
         return tweetMapper.entityToDto(tweet);
-
-    //        public class Main {
-    //            public static void main(String[] args) {
-    //                Pattern pattern = Pattern.compile("w3schools", Pattern.CASE_INSENSITIVE);
-    //                Matcher matcher = pattern.matcher("Visit W3Schools!");
-    //                boolean matchFound = matcher.find();
-    //                if(matchFound) {
-    //                    System.out.println("Match found");
-    //                } else {
-    //                    System.out.println("Match not found");
-    //                }
-    //            }
-    //        }
-    //        Outputs Match found
 	}
 
     @Override

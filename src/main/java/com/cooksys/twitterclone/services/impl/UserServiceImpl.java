@@ -40,8 +40,6 @@ public class UserServiceImpl implements UserService {
 
 		return userMapper.entitiesToDtos(userRepository.findAll().stream().filter(user -> !user.isDeleted()).toList());
 	}
-	
-	
 
 	@Override
 	public UserResponseDto addUser(UserRequestDto newUser) {
