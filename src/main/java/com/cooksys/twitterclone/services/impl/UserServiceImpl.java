@@ -37,7 +37,6 @@ public class UserServiceImpl implements UserService {
 
 	@Override
 	public List<UserResponseDto> getAllUsers() {
-
 		return userMapper.entitiesToDtos(userRepository.findAll().stream().filter(user -> !user.isDeleted()).toList());
 	}
 	
@@ -62,7 +61,7 @@ public class UserServiceImpl implements UserService {
 
 	@Override
 	public UserResponseDto getUser(String username) {
-		Optional<User> findUser = userRepository.findByCredentials(username);
+		Optional<User> findUser = userRepository.findByCredentialsUsername(username);
 		if (findUser.isEmpty()) {
 			throw new NotFoundException("User is not found");
 
@@ -76,7 +75,7 @@ public class UserServiceImpl implements UserService {
 
 	@Override
 	public List<TweetResponseDto> getTweets(String username) {
-		Optional<User> findUser = userRepository.findByCredentials(username);
+		Optional<User> findUser = userRepository.findByCredentialsUsername(username);
 		if (findUser.isEmpty()) {
 			throw new NotFoundException("User is not found");
 
@@ -88,11 +87,25 @@ public class UserServiceImpl implements UserService {
 		return tweetMapper.entitiesToResponseDtos(userTweets);
 	}
 
-//	@Override
-//	public UserResponseDto updateUsername(String username, CredentialsDto credentials) {
-//		// TODO Auto-generated method stub
-//		return null;
-//	}
+	@Override
+	public UserResponseDto updateUsername(String username, CredentialsDto credentials) {
+		if(!userRepository.findAll().contains(username)) {
+			throw new NotFoundException("User not found");
+		}
+		
+		User updateUsername = userRepository.findByUsername(username);
+		
+		if(updateUsername.isDeleted()) {
+			throw new NotFoundException("User not found");
+		}
+		
+		if(!updateUsername.getCredentials().equals(credentialsMapper.dtoToEntity(credentials))) {
+			throw new NotAuthorizedException("Not authroized to make this change");
+		}
+		
+		updateUsername.getCredentials().setUsername(username);
+		return userMapper.entityToDto(updateUsername);
+	}
 
 	@Override
 	public List<UserResponseDto> getFollowing(String user) {
@@ -113,5 +126,8 @@ public class UserServiceImpl implements UserService {
 
 		return userMapper.entitiesToDtos(userFollowingList.getFollowing());
 	}
+	
+	
+	
     
 }
