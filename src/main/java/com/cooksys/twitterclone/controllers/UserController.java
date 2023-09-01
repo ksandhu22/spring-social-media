@@ -65,8 +65,15 @@ public class UserController {
 	public List<UserResponseDto> getFollowers(@PathVariable String username){
 		return userService.getFollowers(username);
 	}
-	
-	
-	
-	
+
+	@PostMapping("/@{username}/follow")
+	public void followUser(@PathVariable String username, @RequestBody CredentialsDto user) {
+		 userService.followUser(username, user);
+	}
+
+	@PostMapping("/@{username}/unfollow")
+	public void unfollowUser(@PathVariable String username, @RequestBody CredentialsDto user) {
+		userService.unfollowUser(username, user);
+	}
+
 }

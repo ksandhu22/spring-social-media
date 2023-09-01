@@ -126,4 +126,35 @@ public class UserServiceImpl implements UserService {
 		return userMapper.entitiesToDtos(userFollowingList.get().getFollowers());
 	}
 
+	@Override
+	public void followUser(String username, CredentialsDto user) {
+
+		Optional<User> foundUser = userRepository.findByCredentialsUsername(username);
+		Optional<User> givenUser = userRepository.findByCredentialsUsername(user.getUsername());
+
+		// givenUser needs to follow foundUser
+
+		if(foundUser.isEmpty() || foundUser.get().isDeleted() || givenUser.isEmpty() || givenUser.get().getCredentials().getPassword() == null || givenUser.get().isDeleted() || givenUser.get().getFollowing().contains(foundUser.get()) || foundUser.get().getFollowers().contains(givenUser.get())) {
+			throw new BadRequestException("nah");
+		}
+
+		givenUser.get().getFollowing().add(foundUser.get());
+		userRepository.saveAndFlush(givenUser.get());
+	}
+
+	@Override
+	public void unfollowUser(String username, CredentialsDto user) {
+		Optional<User> foundUser = userRepository.findByCredentialsUsername(username);
+		Optional<User> givenUser = userRepository.findByCredentialsUsername(user.getUsername());
+
+		// givenUser needs to unfollow foundUser
+
+		if(foundUser.isEmpty() || foundUser.get().isDeleted() || givenUser.isEmpty() || givenUser.get().isDeleted() || !givenUser.get().getFollowing().contains(foundUser.get()) || !foundUser.get().getFollowers().contains(givenUser.get())) {
+			throw new BadRequestException("nah");
+		}
+
+		givenUser.get().getFollowing().remove(foundUser.get());
+		userRepository.saveAndFlush(givenUser.get());
+	}
+
 }
