@@ -171,5 +171,4 @@ public class UserServiceImpl implements UserService {
 		givenUser.get().getFollowing().remove(foundUser.get());
 		userRepository.saveAndFlush(givenUser.get());
 	}
-
 }
