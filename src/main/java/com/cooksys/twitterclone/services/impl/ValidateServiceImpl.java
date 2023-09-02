@@ -5,9 +5,10 @@ import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 
+import com.cooksys.twitterclone.entities.Hashtag;
+import com.cooksys.twitterclone.entities.Tweet;
 import com.cooksys.twitterclone.entities.User;
-import com.cooksys.twitterclone.exceptions.NotAuthorizedException;
-import com.cooksys.twitterclone.exceptions.NotFoundException;
+import com.cooksys.twitterclone.repositories.HashtagRepository;
 import com.cooksys.twitterclone.repositories.UserRepository;
 import com.cooksys.twitterclone.services.ValidateService;
 
@@ -18,6 +19,7 @@ import lombok.RequiredArgsConstructor;
 public class ValidateServiceImpl implements ValidateService {
 
 	private final UserRepository userRepository;
+	private final HashtagRepository hashtagRepository;
 
 	// checks if username is available and returns false if it it taken
 	@Override
@@ -54,5 +56,26 @@ public class ValidateServiceImpl implements ValidateService {
 		
 		return false;
 	
+	}
+
+	//Does not pass test because for loop does not return true so they are not equal.
+	//Need to check values 
+	@Override
+	public boolean hashtagExists(String label) {
+		List<Hashtag> hashtags = hashtagRepository.findAll();
+		Optional<Hashtag> hashtagExists = hashtagRepository.findByLabel(label);
+		if (hashtags.isEmpty()) {
+			return false;
+		}
+		//trying to read print statement to see incoming values maybe missing '#' to make hashtag equal
+		for(Hashtag tag : hashtags) {
+			System.out.println(tag.getLabel());
+			System.out.println(hashtagExists.get().getLabel());
+			if(tag.getLabel().contentEquals(hashtagExists.get().getLabel())) {
+				return true;
+			}
+		}
+		
+		return false;
 	}
 }
