@@ -82,7 +82,7 @@ public class UserServiceImpl implements UserService {
 		User user = findUser.get();
 		List<Tweet> userTweets = new ArrayList<>(user.getTweets());
 
-		return tweetMapper.entitiesToResponseDtos(userTweets);
+		return tweetMapper.entitiesToDtos(userTweets);
 	}
 
 	@Override
@@ -141,8 +141,16 @@ public class UserServiceImpl implements UserService {
 
 		// givenUser needs to follow foundUser
 
-		if(foundUser.isEmpty() || foundUser.get().isDeleted() || givenUser.isEmpty() || givenUser.get().getCredentials().getPassword() == null || givenUser.get().isDeleted() || givenUser.get().getFollowing().contains(foundUser.get()) || foundUser.get().getFollowers().contains(givenUser.get())) {
+//		if(foundUser.isEmpty() || foundUser.get().isDeleted() || givenUser.isEmpty() || givenUser.get().getCredentials().getPassword() == null || givenUser.get().isDeleted() || givenUser.get().getFollowing().contains(foundUser.get()) || foundUser.get().getFollowers().contains(givenUser.get())) {
+//			throw new BadRequestException("nah");
+//		}
+		
+		if(foundUser.isEmpty() || foundUser.get().isDeleted() || givenUser.isEmpty() || givenUser.get().isDeleted() || givenUser.get().getFollowing().contains(foundUser.get()) || foundUser.get().getFollowers().contains(givenUser.get())) {
 			throw new BadRequestException("nah");
+		}
+		
+		if(givenUser.get().getCredentials().getPassword() == null) {
+			throw new NotAuthorizedException("Not authorized");
 		}
 
 		givenUser.get().getFollowing().add(foundUser.get());
