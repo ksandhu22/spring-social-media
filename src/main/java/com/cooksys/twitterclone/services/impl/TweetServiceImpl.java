@@ -6,6 +6,7 @@ import java.util.Optional;
 import java.util.regex.*;
 
 import com.cooksys.twitterclone.dtos.*;
+import com.cooksys.twitterclone.dtos.CredentialsDto;
 import com.cooksys.twitterclone.entities.User;
 import com.cooksys.twitterclone.exceptions.BadRequestException;
 import com.cooksys.twitterclone.repositories.HashtagRepository;
@@ -97,6 +98,7 @@ public class TweetServiceImpl implements TweetService {
 
     @Override
     public List<TweetResponseDto> getAllTweets() {
+    	
         return tweetMapper.entitiesToDtos(tweetRepository.findAll().stream().filter(tweet -> !tweet.isDeleted()).toList());
     }
 
@@ -183,5 +185,33 @@ public class TweetServiceImpl implements TweetService {
         tweetContext.setAfter(getRepliesByTweetId(id));
 
         return tweetContext;
+    }
+    
+    @Override
+    public TweetResponseDto deleteTweet(Long id, CredentialsDto user) throws NotFoundException {
+    	Optional<Tweet> foundTweet = getOptionalTweetById(id);
+    	Optional<User> givenUser = userRepository.findByCredentialsUsername(user.getUsername());
+
+
+    	if(foundTweet.isEmpty() || foundTweet.get().isDeleted() || givenUser.isEmpty() || givenUser.get().isDeleted() || givenUser.get().getCredentials().getPassword() == null) {
+			throw new NotFoundException("Tweet not found");
+		}
+    	
+    	foundTweet.get().setDeleted(true);
+    	tweetRepository.saveAndFlush(foundTweet.get());
+    	return tweetMapper.entityToDto(foundTweet.get());
+    }
+    @Override
+	public void likeTweet(Long id, CredentialsDto user) {
+    	Optional<Tweet> foundTweet = getOptionalTweetById(id);
+    	Optional<User> givenUser = userRepository.findByCredentialsUsername(user.getUsername());
+    	
+    	if(foundTweet.isEmpty() || foundTweet.get().isDeleted() || givenUser.isEmpty() || givenUser.get().isDeleted() || givenUser.get().getCredentials().getPassword() == null) {
+			throw new BadRequestException("nah");
+		}
+    	List<Tweet> tweet = new ArrayList<>();
+    	tweet.add(foundTweet.get());
+    	givenUser.get().setLikedTweets(tweet);
+    	tweetRepository.saveAndFlush(foundTweet.get());
     }
 }

@@ -82,34 +82,39 @@ public class UserServiceImpl implements UserService {
 		User user = findUser.get();
 		List<Tweet> userTweets = new ArrayList<>(user.getTweets());
 
-		return tweetMapper.entitiesToResponseDtos(userTweets);
+		return tweetMapper.entitiesToDtos(userTweets);
 	}
 
 	@Override
 	public UserResponseDto updateUsername(String username, UserRequestDto user) {
 		Optional<User> findUser = userRepository.findByCredentialsUsername(username);
+		
+		
 		if (findUser.isEmpty()) {
 			throw new NotFoundException("User does not exist");
 		}
+//		
 		
-		if(findUser.get().isDeleted()) {
-			throw new NotFoundException("User not found");
-		}
+//		if(findUser.get().getCredentials().getUsername() != user.getCredentials().getUsername() &&  findUser.get().getCredentials().getPassword() != user.getCredentials().getPassword()) {
+//			throw new NotAuthorizedException("Both username and password is not correct");
+//
+//		}
 		
+//		if(findUser.get().getCredentials().getUsername() != user.getCredentials().getUsername()) {
+//			throw new NotAuthorizedException("Username is not provided so you are not authroized to make this change");		}
+//		
+//		if(findUser.get().getCredentials().getPassword() != user.getCredentials().getPassword()) {
+//			throw new NotAuthorizedException("Password is not provided so you are not authroized to make this change");		}
+//		
+//		if(findUser.get().isDeleted()) {
+//			throw new NotFoundException("User not found");
+//		}
+//		
 		
-		if(findUser.get().getCredentials() == null) {
-			throw new BadRequestException("Credentials is not provided");
-
-		}
-		
-		if(findUser.get().getCredentials().getUsername() != user.getCredentials().getUsername()) {
-			throw new NotAuthorizedException("Username is not provided so you are not authroized to make this change");		}
-		
-		if(findUser.get().getCredentials().getPassword() != user.getCredentials().getPassword()) {
-			throw new NotAuthorizedException("Password is not provided so you are not authroized to make this change");		}
-			
 		findUser.get().getCredentials().setUsername(username);
-		return userMapper.entityToDto(findUser.get());
+		return userMapper.entityToDto(findUser.get()); 
+			
+		
 	}
 	
 
@@ -141,12 +146,23 @@ public class UserServiceImpl implements UserService {
 
 		// givenUser needs to follow foundUser
 
-		if(foundUser.isEmpty() || foundUser.get().isDeleted() || givenUser.isEmpty() || givenUser.get().getCredentials().getPassword() == null || givenUser.get().isDeleted() || givenUser.get().getFollowing().contains(foundUser.get()) || foundUser.get().getFollowers().contains(givenUser.get())) {
+//		if(foundUser.isEmpty() || foundUser.get().isDeleted() || givenUser.isEmpty() || givenUser.get().getCredentials().getPassword() == null || givenUser.get().isDeleted() || givenUser.get().getFollowing().contains(foundUser.get()) || foundUser.get().getFollowers().contains(givenUser.get())) {
+//			throw new BadRequestException("nah");
+//		}
+		
+		if(foundUser.isEmpty() || foundUser.get().isDeleted() || givenUser.isEmpty() || givenUser.get().isDeleted() || givenUser.get().getFollowing().contains(foundUser.get()) || foundUser.get().getFollowers().contains(givenUser.get())) {
 			throw new BadRequestException("nah");
 		}
+		
+		if(givenUser.get().getCredentials().getPassword() == null) {
+			throw new NotAuthorizedException("Not authorized");
+		}
 
-		givenUser.get().getFollowing().add(foundUser.get());
-		userRepository.saveAndFlush(givenUser.get());
+//		givenUser.get().getFollowing().add(foundUser.get());
+//		userRepository.saveAndFlush(givenUser.get());
+		
+//		foundUser.get().getFollowing().add(givenUser.get());
+//		userRepository.saveAndFlush(foundUser.get());
 	}
 
 	@Override
@@ -160,8 +176,23 @@ public class UserServiceImpl implements UserService {
 			throw new BadRequestException("nah");
 		}
 
-		givenUser.get().getFollowing().remove(foundUser.get());
-		userRepository.saveAndFlush(givenUser.get());
+//		givenUser.get().getFollowing().remove(foundUser.get());
+//		userRepository.saveAndFlush(givenUser.get());
+		
+//		foundUser.get().getFollowing().remove(givenUser.get());
+//		userRepository.saveAndFlush(foundUser.get());
+		
 	}
 
+	@Override
+	public UserResponseDto deleteUser(String username) {
+		Optional<User> userToDelete = userRepository.findByCredentialsUsername(username);
+		if (userToDelete.isEmpty() || userToDelete.get().isDeleted()) {
+			throw new NotFoundException("User does not exist");
+		}
+		
+		userToDelete.get().setDeleted(true);
+    	userRepository.saveAndFlush(userToDelete.get());
+    	return userMapper.entityToDto(userToDelete.get());
+	}
 }
