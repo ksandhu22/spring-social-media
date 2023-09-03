@@ -38,8 +38,8 @@ public class UserController {
 	
 	@PatchMapping("/@{username}")
 	  public UserResponseDto updateUsername(@PathVariable String username, @RequestBody UserRequestDto user) {
-		return userService.updateUsername(username, user); 
-	  }
+		return userService.updateUsername(username, user);
+	 }
 	
 //	@GetMapping
 //	public boolean validateUsername() {
