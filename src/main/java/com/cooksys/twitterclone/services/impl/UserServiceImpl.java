@@ -158,8 +158,11 @@ public class UserServiceImpl implements UserService {
 			throw new NotAuthorizedException("Not authorized");
 		}
 
-		givenUser.get().getFollowing().add(foundUser.get());
-		userRepository.saveAndFlush(givenUser.get());
+//		givenUser.get().getFollowing().add(foundUser.get());
+//		userRepository.saveAndFlush(givenUser.get());
+		
+//		foundUser.get().getFollowing().add(givenUser.get());
+//		userRepository.saveAndFlush(foundUser.get());
 	}
 
 	@Override
@@ -173,8 +176,12 @@ public class UserServiceImpl implements UserService {
 			throw new BadRequestException("nah");
 		}
 
-		givenUser.get().getFollowing().remove(foundUser.get());
-		userRepository.saveAndFlush(givenUser.get());
+//		givenUser.get().getFollowing().remove(foundUser.get());
+//		userRepository.saveAndFlush(givenUser.get());
+		
+//		foundUser.get().getFollowing().remove(givenUser.get());
+//		userRepository.saveAndFlush(foundUser.get());
+		
 	}
 
 	@Override
