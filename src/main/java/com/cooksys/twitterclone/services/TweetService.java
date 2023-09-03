@@ -27,7 +27,7 @@ public interface TweetService {
 
     TweetResponseDto addTweet(TweetRequestDto newTweet);
 
-	TweetResponseDto deleteTweet(Long id) throws NotFoundException;
+	TweetResponseDto deleteTweet(Long id, CredentialsDto user) throws NotFoundException;
 
 	void likeTweet(Long id, CredentialsDto user);
 }

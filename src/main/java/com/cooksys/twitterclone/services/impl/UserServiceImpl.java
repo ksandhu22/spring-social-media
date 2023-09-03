@@ -88,28 +88,33 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public UserResponseDto updateUsername(String username, UserRequestDto user) {
 		Optional<User> findUser = userRepository.findByCredentialsUsername(username);
+		
+		
 		if (findUser.isEmpty()) {
 			throw new NotFoundException("User does not exist");
 		}
+//		
 		
-		if(findUser.get().isDeleted()) {
-			throw new NotFoundException("User not found");
-		}
+//		if(findUser.get().getCredentials().getUsername() != user.getCredentials().getUsername() &&  findUser.get().getCredentials().getPassword() != user.getCredentials().getPassword()) {
+//			throw new NotAuthorizedException("Both username and password is not correct");
+//
+//		}
 		
+//		if(findUser.get().getCredentials().getUsername() != user.getCredentials().getUsername()) {
+//			throw new NotAuthorizedException("Username is not provided so you are not authroized to make this change");		}
+//		
+//		if(findUser.get().getCredentials().getPassword() != user.getCredentials().getPassword()) {
+//			throw new NotAuthorizedException("Password is not provided so you are not authroized to make this change");		}
+//		
+//		if(findUser.get().isDeleted()) {
+//			throw new NotFoundException("User not found");
+//		}
+//		
 		
-		if(findUser.get().getCredentials() == null) {
-			throw new BadRequestException("Credentials is not provided");
-
-		}
-		
-		if(findUser.get().getCredentials().getUsername() != user.getCredentials().getUsername()) {
-			throw new NotAuthorizedException("Username is not provided so you are not authroized to make this change");		}
-		
-		if(findUser.get().getCredentials().getPassword() != user.getCredentials().getPassword()) {
-			throw new NotAuthorizedException("Password is not provided so you are not authroized to make this change");		}
-			
 		findUser.get().getCredentials().setUsername(username);
-		return userMapper.entityToDto(findUser.get());
+		return userMapper.entityToDto(findUser.get()); 
+			
+		
 	}
 	
 

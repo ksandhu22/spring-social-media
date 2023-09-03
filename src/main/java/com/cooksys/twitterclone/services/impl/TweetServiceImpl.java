@@ -98,6 +98,7 @@ public class TweetServiceImpl implements TweetService {
 
     @Override
     public List<TweetResponseDto> getAllTweets() {
+    	
         return tweetMapper.entitiesToDtos(tweetRepository.findAll().stream().filter(tweet -> !tweet.isDeleted()).toList());
     }
 
@@ -187,11 +188,13 @@ public class TweetServiceImpl implements TweetService {
     }
     
     @Override
-    public TweetResponseDto deleteTweet(Long id) throws NotFoundException {
+    public TweetResponseDto deleteTweet(Long id, CredentialsDto user) throws NotFoundException {
     	Optional<Tweet> foundTweet = getOptionalTweetById(id);
-    	
-    	if(foundTweet.isEmpty() || foundTweet.get().isDeleted()) {
-    		throw new NotFoundException("Tweet does not exist");
+    	Optional<User> givenUser = userRepository.findByCredentialsUsername(user.getUsername());
+
+
+    	if(foundTweet.isEmpty() || foundTweet.get().isDeleted() || givenUser.isEmpty() || givenUser.get().isDeleted() || givenUser.get().getCredentials().getPassword() == null) {
+			throw new NotFoundException("Tweet not found");
 		}
     	
     	foundTweet.get().setDeleted(true);
