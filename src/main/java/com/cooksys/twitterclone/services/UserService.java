@@ -27,5 +27,7 @@ public interface UserService {
 
 	void unfollowUser(String username, CredentialsDto user);
 
+	UserResponseDto deleteUser(String username);
+
 //	boolean validateUsername();
 }

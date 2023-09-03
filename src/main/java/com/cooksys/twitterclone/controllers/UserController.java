@@ -3,6 +3,8 @@ package com.cooksys.twitterclone.controllers;
 import java.util.List;
 
 import com.cooksys.twitterclone.exceptions.BadRequestException;
+
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -75,5 +77,11 @@ public class UserController {
 	public void unfollowUser(@PathVariable String username, @RequestBody CredentialsDto user) {
 		userService.unfollowUser(username, user);
 	}
+	
+	@DeleteMapping("/@{username}")
+	public UserResponseDto deleteUser(@PathVariable String username) {
+		return userService.deleteUser(username);
+	}
+	
 
 }

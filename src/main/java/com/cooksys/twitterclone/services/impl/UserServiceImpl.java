@@ -171,4 +171,16 @@ public class UserServiceImpl implements UserService {
 		givenUser.get().getFollowing().remove(foundUser.get());
 		userRepository.saveAndFlush(givenUser.get());
 	}
+
+	@Override
+	public UserResponseDto deleteUser(String username) {
+		Optional<User> userToDelete = userRepository.findByCredentialsUsername(username);
+		if (userToDelete.isEmpty() || userToDelete.get().isDeleted()) {
+			throw new NotFoundException("User does not exist");
+		}
+		
+		userToDelete.get().setDeleted(true);
+    	userRepository.saveAndFlush(userToDelete.get());
+    	return userMapper.entityToDto(userToDelete.get());
+	}
 }

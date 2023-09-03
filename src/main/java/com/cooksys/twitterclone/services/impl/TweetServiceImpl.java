@@ -191,7 +191,7 @@ public class TweetServiceImpl implements TweetService {
     	Optional<Tweet> foundTweet = getOptionalTweetById(id);
     	
     	if(foundTweet.isEmpty() || foundTweet.get().isDeleted()) {
-			throw new BadRequestException("nah");
+    		throw new NotFoundException("Tweet does not exist");
 		}
     	
     	foundTweet.get().setDeleted(true);

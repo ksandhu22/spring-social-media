@@ -61,7 +61,7 @@ public class TweetController {
 	public ContextDto getContextFromTweetById(@PathVariable Long id) {
 		 return tweetService.getContextFromTweetById(id);
 	 }
-	 @PatchMapping("/{id}")
+	 @DeleteMapping("/{id}")
 	 public TweetResponseDto deleteTweet(@PathVariable Long id) {
 		 return tweetService.deleteTweet(id);
 	 }
