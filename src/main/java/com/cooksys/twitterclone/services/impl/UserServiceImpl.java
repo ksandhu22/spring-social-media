@@ -110,12 +110,6 @@ public class UserServiceImpl implements UserService {
 		if (findUser.isEmpty()) {
 			throw new NotFoundException("User does not exist");
 		}
-//		
-//		
-//		if(findUser.get().getCredentials().getUsername() != user.getCredentials().getUsername() &&  findUser.get().getCredentials().getPassword() != user.getCredentials().getPassword()) {
-//			throw new NotAuthorizedException("Both username and password is not correct");
-//
-//		}
 		
 		if(user.getCredentials() == null) {
 			throw new NotAuthorizedException("Both username is not correct");
@@ -133,17 +127,6 @@ public class UserServiceImpl implements UserService {
 			throw new NotAuthorizedException("Both username is not correct");
 
 		}
-		
-//		if(findUser.get().getCredentials().getUsername() != user.getCredentials().getUsername()) {
-//			throw new NotAuthorizedException("Username is not provided so you are not authroized to make this change");		}
-//		
-//		if(findUser.get().getCredentials().getPassword() != user.getCredentials().getPassword()) {
-//			throw new NotAuthorizedException("Password is not provided so you are not authroized to make this change");		}
-//		
-//		if(findUser.get().isDeleted()) {
-//			throw new NotFoundException("User not found");
-//		}
-//		
 		
 		findUser.get().getCredentials().setUsername(username);
 		return userMapper.entityToDto(findUser.get()); 
@@ -189,12 +172,23 @@ public class UserServiceImpl implements UserService {
 //			throw new BadRequestException("nah");
 //		}
 		
-		if(foundUser.isEmpty() || foundUser.get().isDeleted() || givenUser.isEmpty() || givenUser.get().isDeleted() || givenUser.get().getFollowing().contains(foundUser.get()) || foundUser.get().getFollowers().contains(givenUser.get())) {
-			throw new BadRequestException("nah");
-		}
 		
-		if(givenUser.get().getCredentials().getPassword() == null) {
-			throw new NotAuthorizedException("Not authorized");
+		
+		
+//		if(foundUser.isEmpty() || foundUser.get().isDeleted() || givenUser.isEmpty() || givenUser.get().isDeleted() || givenUser.get().getFollowing().contains(foundUser.get()) || foundUser.get().getFollowers().contains(givenUser.get())) {
+//			throw new BadRequestException("nah");
+//		}
+//		
+//		if(givenUser.get().getCredentials().getPassword() == null) {
+//			throw new NotAuthorizedException("Not authorized");
+//		}
+		if(user.getUsername() == null) {
+			throw new NotAuthorizedException("Username is not given");
+
+		}
+		if(user.getPassword() == null) {
+			throw new NotAuthorizedException("Password is not given");
+
 		}
 
 		givenUser.get().getFollowing().add(foundUser.get());
@@ -213,6 +207,15 @@ public class UserServiceImpl implements UserService {
 
 		if(foundUser.isEmpty() || foundUser.get().isDeleted() || givenUser.isEmpty() || givenUser.get().isDeleted() || !givenUser.get().getFollowing().contains(foundUser.get()) || !foundUser.get().getFollowers().contains(givenUser.get())) {
 			throw new BadRequestException("nah");
+		}
+		
+		if(user.getUsername() == null) {
+			throw new NotAuthorizedException("Username is not given");
+
+		}
+		if(user.getPassword() == null) {
+			throw new NotAuthorizedException("Password is not given");
+
 		}
 
 		givenUser.get().getFollowing().remove(foundUser.get());
