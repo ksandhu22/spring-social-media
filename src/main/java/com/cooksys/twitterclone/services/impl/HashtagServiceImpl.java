@@ -37,9 +37,9 @@ public class HashtagServiceImpl implements HashtagService {
 	@Override
 	public List<TweetResponseDto> getTweetsByLabel(String label) {
 
-		Optional<Hashtag> foundTag = hashtagRepository.findById(label);
+		 Optional<Hashtag> foundTag = hashtagRepository.findById(label);
 
-		return tweetMapper.entitiesToDtos(foundTag.get().getTweets());
+		 return tweetMapper.entitiesToDtos(foundTag.get().getTweets());
 
 
 //		Retrieves all (non-deleted) tweets tagged with the given hashtag label.

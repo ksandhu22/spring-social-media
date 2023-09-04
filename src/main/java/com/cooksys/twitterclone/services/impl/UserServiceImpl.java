@@ -41,21 +41,38 @@ public class UserServiceImpl implements UserService {
 		return userMapper.entitiesToDtos(userRepository.findAll().stream().filter(user -> !user.isDeleted()).toList());
 	}
 
+//	@Override
+//	public UserResponseDto addUser(UserRequestDto newUser) {
+//	    if(newUser.getCredentials() == null || newUser.getProfile() == null || newUser.getCredentials().getUsername() == null || newUser.getCredentials().getPassword() == null || newUser.getProfile().getEmail() == null) {
+//	        throw new BadRequestException("Necessary fields must not be empty");
+//	    }
+//	    User hopefullyFound = userRepository.findByUsername(newUser.getCredentials().getUsername());
+//	    if(hopefullyFound != null && !hopefullyFound.isDeleted()) {
+//	        throw new BadRequestException("This username already exists and is not deactivated");
+//	    }
+//	    if(hopefullyFound != null && hopefullyFound.isDeleted()) {
+//	        hopefullyFound.setDeleted(false);
+//	        return userMapper.entityToDto(userRepository.saveAndFlush(hopefullyFound));
+//	    }
+//	    User addedUser = userMapper.requestDtoToEntity(newUser);
+//	    return userMapper.entityToDto( userRepository.saveAndFlush(addedUser));
+//	}
+
 	@Override
 	public UserResponseDto addUser(UserRequestDto newUser) {
-	    if(newUser.getCredentials() == null || newUser.getProfile() == null || newUser.getCredentials().getUsername() == null || newUser.getCredentials().getPassword() == null || newUser.getProfile().getEmail() == null) {
-	        throw new BadRequestException("Necessary fields must not be empty");
-	    }
-	    User hopefullyFound = userRepository.findByUsername(newUser.getCredentials().getUsername());
-	    if(hopefullyFound != null && !hopefullyFound.isDeleted()) {
-	        throw new BadRequestException("This username already exists and is not deactivated");
-	    }
-	    if(hopefullyFound != null && hopefullyFound.isDeleted()) {
-	        hopefullyFound.setDeleted(false);
-	        return userMapper.entityToDto(userRepository.saveAndFlush(hopefullyFound));
-	    }
-	    User addedUser = userMapper.requestDtoToEntity(newUser);
-	    return userMapper.entityToDto( userRepository.saveAndFlush(addedUser));
+		if(newUser.getCredentials() == null || newUser.getProfile() == null || newUser.getCredentials().getUsername() == null || newUser.getCredentials().getPassword() == null || newUser.getProfile().getEmail() == null) {
+			throw new BadRequestException("Necessary fields must not be empty");
+		}
+		Optional<User> hopefullyFound = userRepository.findByUsername(newUser.getCredentials().getUsername());
+		if(hopefullyFound.isPresent() && !hopefullyFound.get().isDeleted()) {
+			throw new BadRequestException("This username already exists and is not deactivated");
+		}
+		if(hopefullyFound.isPresent() && hopefullyFound.get().isDeleted()) {
+			hopefullyFound.get().setDeleted(false);
+			return userMapper.entityToDto(userRepository.saveAndFlush(hopefullyFound.get()));
+		}
+		User addedUser = userMapper.requestDtoToEntity(newUser);
+		return userMapper.entityToDto( userRepository.saveAndFlush(addedUser));
 	}
 
 	@Override
