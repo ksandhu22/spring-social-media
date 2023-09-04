@@ -141,6 +141,11 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public void followUser(String username, CredentialsDto user) {
 
+//		Subscribes the user whose credentials are provided by the request body to the user whose username is given in the url.
+//		If there is already a following relationship between the two users, no such followable user exists (deleted or never created),
+//		or the credentials provided do not match an active user in the database, an error should be sent as a response.
+//		If successful, no data is sent.
+
 		Optional<User> foundUser = userRepository.findByCredentialsUsername(username);
 		Optional<User> givenUser = userRepository.findByCredentialsUsername(user.getUsername());
 
@@ -158,11 +163,11 @@ public class UserServiceImpl implements UserService {
 			throw new NotAuthorizedException("Not authorized");
 		}
 
-//		givenUser.get().getFollowing().add(foundUser.get());
-//		userRepository.saveAndFlush(givenUser.get());
-		
-//		foundUser.get().getFollowing().add(givenUser.get());
-//		userRepository.saveAndFlush(foundUser.get());
+		givenUser.get().getFollowing().add(foundUser.get());
+		userRepository.saveAndFlush(givenUser.get());
+
+		foundUser.get().getFollowers().add(givenUser.get());
+		userRepository.saveAndFlush(foundUser.get());
 	}
 
 	@Override
@@ -176,12 +181,11 @@ public class UserServiceImpl implements UserService {
 			throw new BadRequestException("nah");
 		}
 
-//		givenUser.get().getFollowing().remove(foundUser.get());
-//		userRepository.saveAndFlush(givenUser.get());
-		
-//		foundUser.get().getFollowing().remove(givenUser.get());
-//		userRepository.saveAndFlush(foundUser.get());
-		
+		givenUser.get().getFollowing().remove(foundUser.get());
+		userRepository.saveAndFlush(givenUser.get());
+
+		foundUser.get().getFollowers().remove(givenUser.get());
+		userRepository.saveAndFlush(foundUser.get());
 	}
 
 	@Override
