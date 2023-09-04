@@ -175,9 +175,9 @@ public class UserServiceImpl implements UserService {
 		
 		
 		
-//		if(foundUser.isEmpty() || foundUser.get().isDeleted() || givenUser.isEmpty() || givenUser.get().isDeleted() || givenUser.get().getFollowing().contains(foundUser.get()) || foundUser.get().getFollowers().contains(givenUser.get())) {
-//			throw new BadRequestException("nah");
-//		}
+		if(foundUser.isEmpty() || foundUser.get().isDeleted() || givenUser.isEmpty() || givenUser.get().isDeleted() || givenUser.get().getFollowing().contains(foundUser.get()) || foundUser.get().getFollowers().contains(givenUser.get())) {
+			throw new BadRequestException("nah");
+		}
 //		
 //		if(givenUser.get().getCredentials().getPassword() == null) {
 //			throw new NotAuthorizedException("Not authorized");
