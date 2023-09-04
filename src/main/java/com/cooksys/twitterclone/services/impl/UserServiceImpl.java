@@ -111,11 +111,28 @@ public class UserServiceImpl implements UserService {
 			throw new NotFoundException("User does not exist");
 		}
 //		
-		
+//		
 //		if(findUser.get().getCredentials().getUsername() != user.getCredentials().getUsername() &&  findUser.get().getCredentials().getPassword() != user.getCredentials().getPassword()) {
 //			throw new NotAuthorizedException("Both username and password is not correct");
 //
 //		}
+		
+		if(user.getCredentials() == null) {
+			throw new NotAuthorizedException("Both username is not correct");
+
+		}
+		if(user.getCredentials().getUsername() == null) {
+			throw new NotAuthorizedException("Both username is not correct");
+
+		}
+		if(user.getCredentials().getPassword() == null) {
+			throw new NotAuthorizedException("Both username is not correct");
+
+		}
+		if(user.getProfile() == null) {
+			throw new NotAuthorizedException("Both username is not correct");
+
+		}
 		
 //		if(findUser.get().getCredentials().getUsername() != user.getCredentials().getUsername()) {
 //			throw new NotAuthorizedException("Username is not provided so you are not authroized to make this change");		}
