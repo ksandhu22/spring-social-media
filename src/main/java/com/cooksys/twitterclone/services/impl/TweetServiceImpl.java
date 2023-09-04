@@ -28,6 +28,8 @@ import java.util.regex.Pattern;
 
 import lombok.RequiredArgsConstructor;
 
+import javax.swing.text.html.Option;
+
 @Service
 @RequiredArgsConstructor
 public class TweetServiceImpl implements TweetService {
@@ -64,7 +66,7 @@ public class TweetServiceImpl implements TweetService {
     }
 
     public void parseForHashtags(Tweet tweet) {
-        Pattern pattern = Pattern.compile("@\\w+", Pattern.CASE_INSENSITIVE);
+        Pattern pattern = Pattern.compile("#\\w+", Pattern.CASE_INSENSITIVE);
         Matcher matcher = pattern.matcher(tweet.getContent());
 
         List<Hashtag> hashtags = new ArrayList<>();
@@ -106,22 +108,23 @@ public class TweetServiceImpl implements TweetService {
 	@Override
 	public TweetResponseDto addTweet(TweetRequestDto newTweet) {
 
-        Optional<User> foundAuthor = Optional.ofNullable(userRepository.findByUsername(newTweet.getCredentials().getUsername()));
-
-        // Optional<User> foundAuthor = Optional.ofNullable(foundAuthorEntity);
-
-//        if(foundAuthor.getCredentials() == null) {
-//            throw new BadRequestException("user does not exist");
-//        }
-
-        if(foundAuthor.isEmpty()) {
+        if(newTweet.getContent() == null || newTweet.getCredentials() == null) {
             throw new BadRequestException("user does not exist");
         }
 
-        Tweet tweet = new Tweet();
+        Optional<User> foundAuthor = userRepository.findByUsername(newTweet.getCredentials().getUsername());
+
+        if(foundAuthor.isEmpty() || !foundAuthor.get().getCredentials().getPassword().equals(newTweet.getCredentials().getPassword())) {
+            throw new BadRequestException("user does not exist");
+        }
+
+        Tweet tweet = tweetMapper.requestDtoToEntity(newTweet);
+        tweet.setHashtags(new ArrayList<>());
+        tweet.setMentionedUsers(new ArrayList<>());
         tweet.setAuthor(foundAuthor.get());
         parseForUserMentions(tweet);
         parseForHashtags(tweet);
+        tweetRepository.saveAndFlush(tweet);
         return tweetMapper.entityToDto(tweet);
 	}
 
