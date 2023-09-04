@@ -83,5 +83,15 @@ public class UserController {
 		return userService.deleteUser(username);
 	}
 	
+	@GetMapping("/@{username}/feed")
+	public List<TweetResponseDto> getFeed(@PathVariable String username){
+		return userService.getFeed(username);
+	}
+	
+	@GetMapping("/@{username}/mentions")
+	public List<TweetResponseDto> getMentions(@PathVariable String username){
+		return userService.getMentions(username);
+	}
+	
 
 }

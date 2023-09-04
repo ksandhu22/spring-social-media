@@ -29,5 +29,10 @@ public interface UserService {
 
 	UserResponseDto deleteUser(String username);
 
+	List<TweetResponseDto> getFeed(String username);
+
+	List<TweetResponseDto> getMentions(String username);
+
+
 //	boolean validateUsername();
 }

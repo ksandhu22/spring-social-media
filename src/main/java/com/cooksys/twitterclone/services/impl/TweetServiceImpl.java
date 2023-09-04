@@ -75,7 +75,7 @@ public class TweetServiceImpl implements TweetService {
             String hashtag = matchResult.group().substring(1);
             hashtagRepository.findAll()
                     .stream()
-                    .filter(hashtag1 -> hashtag1.getLabel().equals(hashtag))
+                    .filter(hashtag1 -> hashtag1.getLabel().equals(hashtag))//can't you have duplicate tweets?
                     .forEach(hashtag1 -> {
                         hashtags.add(hashtag1);
                         hashtag1.getTweets().add(tweet);

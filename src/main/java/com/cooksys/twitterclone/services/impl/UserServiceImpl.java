@@ -168,20 +168,10 @@ public class UserServiceImpl implements UserService {
 
 		// givenUser needs to follow foundUser
 
-//		if(foundUser.isEmpty() || foundUser.get().isDeleted() || givenUser.isEmpty() || givenUser.get().getCredentials().getPassword() == null || givenUser.get().isDeleted() || givenUser.get().getFollowing().contains(foundUser.get()) || foundUser.get().getFollowers().contains(givenUser.get())) {
-//			throw new BadRequestException("nah");
-//		}
-		
-		
-		
-		
+
 		if(foundUser.isEmpty() || foundUser.get().isDeleted() || givenUser.isEmpty() || givenUser.get().isDeleted() || givenUser.get().getFollowing().contains(foundUser.get()) || foundUser.get().getFollowers().contains(givenUser.get())) {
 			throw new BadRequestException("nah");
 		}
-//		
-//		if(givenUser.get().getCredentials().getPassword() == null) {
-//			throw new NotAuthorizedException("Not authorized");
-//		}
 		if(user.getUsername() == null) {
 			throw new NotAuthorizedException("Username is not given");
 
@@ -235,5 +225,32 @@ public class UserServiceImpl implements UserService {
 		userToDelete.get().setDeleted(true);
     	userRepository.saveAndFlush(userToDelete.get());
     	return userMapper.entityToDto(userToDelete.get());
+	}
+
+	@Override
+	public List<TweetResponseDto> getFeed(String username) {
+		Optional<User> userToFind = userRepository.findByCredentialsUsername(username);
+		if (userToFind.isEmpty() || userToFind.get().isDeleted()) {
+			throw new NotFoundException("User does not exist");
+		}
+		
+		User user = userToFind.get();
+		List<Tweet> userTweets = new ArrayList<>(user.getTweets());
+
+		return tweetMapper.entitiesToDtos(userTweets);
+		
+	}
+
+	@Override
+	public List<TweetResponseDto> getMentions(String username) {
+		Optional<User> userToFind = userRepository.findByCredentialsUsername(username);
+		if (userToFind.isEmpty() || userToFind.get().isDeleted()) {
+			throw new NotFoundException("User does not exist");
+		}
+		
+		User user = userToFind.get();
+		List<Tweet> userTweets = new ArrayList<>(user.getTweets());
+
+		return tweetMapper.entitiesToDtos(userTweets);
 	}
 }
