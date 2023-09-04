@@ -98,7 +98,7 @@ public class TweetServiceImpl implements TweetService {
 
     @Override
     public List<TweetResponseDto> getAllTweets() {
-    	
+    	//findAll(Sort.by(Sort.Direction.ASC, "seatNumber")
         return tweetMapper.entitiesToDtos(tweetRepository.findAll().stream().filter(tweet -> !tweet.isDeleted()).toList());
     }
 
